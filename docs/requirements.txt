@@ -1,1 +1,0 @@
-sphinx_molview_theme
