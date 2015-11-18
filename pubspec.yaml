@@ -1,0 +1,11 @@
+name:        molviewfmt
+version:     0.0.1
+author:      Herman Bergwerf <hermanbergwerf@gmail.com>
+description: The universal code formatter for the MolView project.
+homepage:    https://github.com/molview/molviewfmt
+environment:
+  sdk:       ">=1.8.0 <2.0.0"
+dependencies:
+  args:      ^0.13.2
+  glob:      ^1.0.5
+  which:     ^0.1.3

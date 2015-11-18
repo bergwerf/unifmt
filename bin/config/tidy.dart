@@ -1,3 +1,8 @@
+library molviewfmt.config.tidy;
+
+/// Configuration for `tidy-html5`. Run `tidy -help-config` to get all possible
+/// configuration values.
+final String tidyConfig = '''
 #accessibility-check         enum       0 (Tidy Classic), 1 (Priority 1 Checks),
 #                                       2 (Priority 2 Checks), 3 (Priority 3
 #                                       Checks)
@@ -212,3 +217,4 @@ uppercase-tags: no
 
 #write-back                  Boolean    y/n, yes/no, t/f, true/false, 1/0
 write-back: yes
+''';

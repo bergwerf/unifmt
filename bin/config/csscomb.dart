@@ -1,3 +1,7 @@
+library molviewfmt.config.csscomb;
+
+/// Configuration for `csscomb`, generated using http://www.csscomb.com/.
+final String csscombConfig = '''
 {
   "remove-empty-rulesets": true,
   "always-semicolon": true,
@@ -24,3 +28,4 @@
   "unitless-zero": true,
   "vendor-prefix-align": true
 }
+''';
