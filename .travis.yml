@@ -2,5 +2,12 @@ language: dart
 dart:
 - stable
 - dev
+before_install:
+- wget http://binaries.html-tidy.org/binaries/tidy-5.0.0/tidy-5.0.0-64bit.deb
+- sudo dpkg -i tidy-5.0.0-64bit.deb
+- sudo pip install --upgrade autopep8
+- sudo pip install --upgrade bashbeautify
+- sudo npm install standard -g
+- sudo npm install csscomb -g
 script:
 - ./test/test.sh
