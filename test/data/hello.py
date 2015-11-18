@@ -26,4 +26,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 '''
 
-print("Hello, World!")
+text = "Hello, World!"
+if (len(text) > 0)
+    print("Hello, World!")
