@@ -29,6 +29,10 @@ packages:
     description: string_scanner
     source: hosted
     version: "0.1.4"
+  watcher:
+    description: watcher
+    source: hosted
+    version: "0.9.7"
   when:
     description: when
     source: hosted

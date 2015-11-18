@@ -1,8 +1,10 @@
 /// molviewfmt command-line tool
 
 import 'dart:io';
+import 'dart:async';
 
 import 'package:args/args.dart';
+import 'package:watcher/watcher.dart';
 
 import 'formatter.dart';
 import 'formatters.dart';
@@ -28,30 +30,46 @@ main(List<String> args) async {
 
   // Bootstrap formatters.
   if (options['watch']) {
-    // Start DirectoryWatcher.
-    Directory.current
-        .watch(events: FileSystemEvent.MODIFY, recursive: true)
-        .listen((FileSystemEvent event) {
-      // Search for suitable formatter.
-      for (CodeFormatter formatter in formatters) {
-        if (formatter.canFormat(event.path)) {
-          // Format file.
-          var result = formatter.formatOne(event.path);
+    // Setup watching.
+    var watcher = new DirectoryWatcher(Directory.current.path);
 
-          // Print results.
-          if (result.success) {
-            if (options['verbose'] && result.stdout != null) {
-              stdout.write(result.stdout);
+    // Declare subscription.
+    StreamSubscription subscription;
+
+    // Handle watch events.
+    onWatchEvent(WatchEvent event) async {
+      if (event.type == ChangeType.MODIFY) {
+        print(event);
+        // Search for suitable formatter.
+        for (CodeFormatter formatter in formatters) {
+          if (formatter.canFormat(event.path)) {
+            // Cancel subscription.
+            await subscription.cancel();
+
+            // Format file.
+            var result = formatter.formatOne(event.path);
+
+            // Reattatch subscription.
+            subscription = watcher.events.listen(onWatchEvent);
+
+            // Print results.
+            if (result.success) {
+              if (options['verbose'] && result.stdout != null) {
+                stdout.write(result.stdout);
+              }
+            } else {
+              stderr.write(result.stderr != null
+                  ? result.stderr
+                  : 'The ${formatter.language} formatter exited with a non-zero status.\n');
+              exit(1);
             }
-          } else {
-            stderr.write(result.stderr != null
-                ? result.stderr
-                : 'The ${formatter.language} formatter exited with a non-zero status.\n');
-            exit(1);
           }
         }
       }
-    });
+    }
+
+    // Attatch watcher.
+    subscription = watcher.events.listen(onWatchEvent);
   } else {
     // Glob all files and reformat.
     for (CodeFormatter formatter in formatters) {
