@@ -105,17 +105,17 @@ class CodeFormatter {
     // Generate installMessage.
     var installMessage =
         new StringBuffer("The program '${this._bin}' is not installed.");
-    if (pip != null) {
+    if (pub != null) {
       installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('pub global activate $pub\n');
+      installMessage.writeln('pub global activate $pub');
     } else if (npm != null) {
       installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('npm install $npm -g\n');
+      installMessage.writeln('npm install $npm -g');
     } else if (pip != null) {
       installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('pip install --upgrade $pip\n');
+      installMessage.writeln('pip install --upgrade $pip');
     } else if (website != null) {
-      installMessage.writeln(' See $website for installation instructions.\n');
+      installMessage.writeln(' See $website for installation instructions.');
     } else {
       installMessage.write('\n');
     }
