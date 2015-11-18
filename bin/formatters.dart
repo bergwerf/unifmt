@@ -19,7 +19,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
       '**/*.dart',
       'dartfmt',
       (final String file) => ['-w', file],
-      (final List<String> files) => ['-w' './'],
+      (final List<String> files) => ['-w', './'],
       pub: 'dart_style'));
 
   // Go formatter

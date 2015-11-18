@@ -46,7 +46,7 @@ main(List<String> args) async {
           } else {
             stderr.write(result.stderr != null
                 ? result.stderr
-                : 'The ${formatter.language} formatter exited with a non-zero status.');
+                : 'The ${formatter.language} formatter exited with a non-zero status.\n');
             exit(1);
           }
         }
@@ -66,9 +66,15 @@ main(List<String> args) async {
           stdout.write(result.stdout);
         }
       } else {
-        stderr.write(result.stderr != null
-            ? result.stderr
-            : 'The ${formatter.language} formatter exited with a non-zero status.');
+        if (result.stdout != null) {
+          stderr.write(result.stdout);
+        }
+        if (result.stderr != null) {
+          stderr.write(result.stderr);
+        }
+        if (result.stdout == null && result.stderr == null) {
+          stderr.writeln('The ${formatter.language} formatter exited with a non-zero status.');
+        }
         exit(1);
       }
     }
