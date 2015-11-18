@@ -71,8 +71,8 @@ class CodeFormatter {
   FormatterResult formatOne(String filepath) {
     if (checkInstallation()) {
       var output = Process.runSync(_bin, _getArgsOne(filepath));
-      return new FormatterResult(output.exitCode == 0, output.stdout,
-        output.stderr);
+      return new FormatterResult(
+          output.exitCode == 0, output.stdout, output.stderr);
     } else {
       return new FormatterResult(false, null, _installMessage);
     }
@@ -83,11 +83,11 @@ class CodeFormatter {
     var fileEntities = _glob.listSync(followLinks: false);
     if (fileEntities.length > 0) {
       if (checkInstallation()) {
-        var files = new List<String>.generate(fileEntities.length,
-          (int i) => fileEntities[i].path);
+        var files = new List<String>.generate(
+            fileEntities.length, (int i) => fileEntities[i].path);
         var output = Process.runSync(_bin, _getArgsAll(files));
-        return new FormatterResult(output.exitCode == 0, output.stdout,
-          output.stderr);
+        return new FormatterResult(
+            output.exitCode == 0, output.stdout, output.stderr);
       } else {
         return new FormatterResult(false, null, _installMessage);
       }
@@ -96,12 +96,13 @@ class CodeFormatter {
     }
   }
 
-  CodeFormatter(this._language, final String glob, this._bin,
-      this._getArgsOne, this._getArgsAll,
+  CodeFormatter(this._language, final String glob, this._bin, this._getArgsOne,
+      this._getArgsAll,
       {final String pub,
       final String npm,
       final String pip,
-      final String website}) : _glob = new Glob(glob) {
+      final String website})
+      : _glob = new Glob(glob) {
     // Generate installMessage.
     var installMessage =
         new StringBuffer("The program '${this._bin}' is not installed.");

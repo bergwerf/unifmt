@@ -73,7 +73,8 @@ main(List<String> args) async {
           stderr.write(result.stderr);
         }
         if (result.stdout == null && result.stderr == null) {
-          stderr.writeln('The ${formatter.language} formatter exited with a non-zero status.');
+          stderr.writeln(
+              'The ${formatter.language} formatter exited with a non-zero status.');
         }
         exit(1);
       }
