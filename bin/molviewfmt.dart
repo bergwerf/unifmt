@@ -47,6 +47,7 @@ main(List<String> args) async {
             stderr.write(result.stderr != null
                 ? result.stderr
                 : 'The ${formatter.language} formatter exited with a non-zero status.');
+            exit(1);
           }
         }
       }
@@ -68,6 +69,7 @@ main(List<String> args) async {
         stderr.write(result.stderr != null
             ? result.stderr
             : 'The ${formatter.language} formatter exited with a non-zero status.');
+        exit(1);
       }
     }
   }
