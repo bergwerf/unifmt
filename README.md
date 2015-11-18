@@ -11,6 +11,13 @@ system.
 
 Getting started
 ---------------
+### Install
+To install `molviewfmt` on your system, run:
+```
+pub global activate molviewfmt
+```
+
+### Run
 To format all underlying files, run:
 ```
 molviewfmt
