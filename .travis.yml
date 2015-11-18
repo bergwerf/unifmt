@@ -5,8 +5,8 @@ dart:
 before_install:
 - wget http://binaries.html-tidy.org/binaries/tidy-5.0.0/tidy-5.0.0-64bit.deb
 - sudo dpkg -i tidy-5.0.0-64bit.deb
-- pip install --upgrade autopep8
-- pip install --upgrade bashbeautify
+- sudo pip install --upgrade autopep8
+- sudo pip install --upgrade bashbeautify
 - npm install standard -g
 - npm install csscomb -g
 script:
