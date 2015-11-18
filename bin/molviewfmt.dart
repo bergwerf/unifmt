@@ -38,6 +38,7 @@ main(List<String> args) async {
 
     // Handle watch events.
     onWatchEvent(WatchEvent event) async {
+      // TODO: Match event againts .gitignore globs.
       if (event.type == ChangeType.MODIFY) {
         print(event);
         // Search for suitable formatter.

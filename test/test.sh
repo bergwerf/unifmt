@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is a very minimal test.
-# TODO: cover more use cases and validate output
+# TODO: Cover more use cases and validate output.
 
 # Descend to where the script location.
 cd "$(dirname "$0")"
