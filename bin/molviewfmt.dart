@@ -41,10 +41,10 @@ main(List<String> args) async {
           // Print results.
           if (result.success) {
             if (options['verbose'] && result.stdout != null) {
-              print(result.stdout);
+              stdout.write(result.stdout);
             }
           } else {
-            print(result.stderr != null
+            stderr.write(result.stderr != null
                 ? result.stderr
                 : 'The ${formatter.language} formatter exited with a non-zero status.');
           }
@@ -55,17 +55,17 @@ main(List<String> args) async {
     // Glob all files and reformat.
     for (CodeFormatter formatter in formatters) {
       if (options['verbose']) {
-        print('Running ${formatter.language} formatter\n');
+        print('Running ${formatter.language} formatter');
       }
       var result = formatter.formatAll();
 
       // Print results.
       if (result.success) {
         if (options['verbose'] && result.stdout != null) {
-          print(result.stdout);
+          stdout.write(result.stdout);
         }
       } else {
-        print(result.stderr != null
+        stderr.write(result.stderr != null
             ? result.stderr
             : 'The ${formatter.language} formatter exited with a non-zero status.');
       }

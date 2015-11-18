@@ -51,20 +51,20 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // Write tidy configuration to temporary file.
   var tidyConfigFile =
       await new File('${systemTmpDir.path}/molviewfmt/tidy.yaml')
-        ..create(recursive: true)
-        ..writeAsString(tidyConfig);
+          .create(recursive: true);
+  await tidyConfigFile.writeAsString(tidyConfig);
   // HTML formtter
   formatters.add(new CodeFormatter('HTML', '**/*.html', 'tidy',
       (final String file) => ['-config', tidyConfigFile.path, file],
       (final List<String> files) {
-    return files.insertAll(0, ['-config', tidyConfigFile.path]);
+    return files..insertAll(0, ['-config', tidyConfigFile.path]);
   }, website: 'http://www.html-tidy.org/'));
 
-  // Write tidy configuration to temporary file.
+  // Write csscomb configuration to temporary file.
   var csscombConfigFile =
       await new File('${systemTmpDir.path}/molviewfmt/csscomb.json')
-        ..create(recursive: true)
-        ..writeAsString(csscombConfig);
+          .create(recursive: true);
+  await csscombConfigFile.writeAsString(csscombConfig);
   // CSS formatter
   formatters.add(new CodeFormatter(
       'CSS',
@@ -76,7 +76,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
 
   // Bash formatter
   formatters.add(new CodeFormatter('Bash', '**/*.sh', 'bashbeautify',
-      (final String file) => [file], (final List<String> files) => ['**/*.sh'],
+      (final String file) => [file], (final List<String> files) => files,
       pip: 'bashbeautify'));
 
   // Return formatters.

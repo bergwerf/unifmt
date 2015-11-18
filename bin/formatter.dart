@@ -80,7 +80,7 @@ class CodeFormatter {
 
   /// Globs all files and runs the formatter.
   FormatterResult formatAll() {
-    var fileEntities = _glob.listSync();
+    var fileEntities = _glob.listSync(followLinks: false);
     if (fileEntities.length > 0) {
       if (checkInstallation()) {
         var files = new List<String>.generate(fileEntities.length,
@@ -107,15 +107,15 @@ class CodeFormatter {
         new StringBuffer("The program '${this._bin}' is not installed.");
     if (pip != null) {
       installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('pub global activate $pub');
+      installMessage.writeln('pub global activate $pub\n');
     } else if (npm != null) {
       installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('npm install $npm -g');
+      installMessage.writeln('npm install $npm -g\n');
     } else if (pip != null) {
       installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('pip install --upgrade $pip');
+      installMessage.writeln('pip install --upgrade $pip\n');
     } else if (website != null) {
-      installMessage.writeln(' See $website for installation instructions.');
+      installMessage.writeln(' See $website for installation instructions.\n');
     } else {
       installMessage.write('\n');
     }
