@@ -52,7 +52,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   var tidyConfigFile =
       await new File('${systemTmpDir.path}/molviewfmt/tidy.yaml')
           .create(recursive: true);
-  await tidyConfigFile.writeAsString(tidyConfig);
+  await tidyConfigFile.writeAsString(getDefaultTidyConfig());
   // HTML formtter
   formatters.add(new CodeFormatter('HTML', '**/*.html', 'tidy',
       (final String file) => ['-config', tidyConfigFile.path, file],
