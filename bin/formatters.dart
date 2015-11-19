@@ -64,7 +64,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   var csscombConfigFile =
       await new File('${systemTmpDir.path}/molviewfmt/csscomb.json')
           .create(recursive: true);
-  await csscombConfigFile.writeAsString(csscombConfig);
+  await csscombConfigFile.writeAsString(getDefaultCSSCombConfig());
   // CSS formatter
   formatters.add(new CodeFormatter(
       'CSS',
