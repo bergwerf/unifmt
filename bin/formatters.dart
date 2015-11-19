@@ -73,6 +73,14 @@ Future<Set<CodeFormatter>> getFormatters() async {
       (final String file) => ['--config', csscombConfigFile.path, file],
       (final List<String> files) => ['--config', csscombConfigFile.path, './'],
       npm: 'csscomb'));
+  // Sass formatter
+  formatters.add(new CodeFormatter(
+      'Sass',
+      '**/*.scss',
+      'csscomb',
+      (final String file) => ['--config', csscombConfigFile.path, file],
+      (final List<String> files) => ['--config', csscombConfigFile.path, './'],
+      npm: 'csscomb'));
 
   // Bash formatter
   formatters.add(new CodeFormatter('Bash', '**/*.sh', 'bashbeautify',
