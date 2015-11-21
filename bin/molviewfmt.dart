@@ -62,7 +62,8 @@ main(List<String> args) async {
               stderr.write(result.stderr != null
                   ? result.stderr
                   : 'The ${formatter.language} formatter exited with a non-zero status.\n');
-              exit(1);
+              // Do not exit when watching files.
+              //exit(1);
             }
           }
         }

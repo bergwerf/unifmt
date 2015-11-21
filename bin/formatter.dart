@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:glob/glob.dart';
 import 'package:which/which.dart';
 
+import 'gitignore.dart';
+
 /// Object for formatter output
 class FormatterResult {
   /// Has the formatter exited successfully?
@@ -39,6 +41,9 @@ class CodeFormatter {
   /// Get _language.
   String get language => _language;
 
+  /// Gitignore rules for this language.
+  GitignoreMatcher _gitignore;
+
   /// Glob describing the source files that should be formatted by this
   /// formatter.
   final Glob _glob;
@@ -70,9 +75,14 @@ class CodeFormatter {
   /// does, it should return true.
   FormatterResult formatOne(String filepath) {
     if (checkInstallation()) {
-      var output = Process.runSync(_bin, _getArgsOne(filepath));
-      return new FormatterResult(
-          output.exitCode == 0, output.stdout, output.stderr);
+      if (!_gitignore.exclude(filepath)) {
+        var output = Process.runSync(_bin, _getArgsOne(filepath));
+        return new FormatterResult(
+            output.exitCode == 0, output.stdout, output.stderr);
+      } else {
+        return new FormatterResult(
+            false, null, 'This file is excluded in your .gitignore file.');
+      }
     } else {
       return new FormatterResult(false, null, _installMessage);
     }
@@ -85,7 +95,8 @@ class CodeFormatter {
       if (checkInstallation()) {
         var files = new List<String>.generate(
             fileEntities.length, (int i) => fileEntities[i].path);
-        var output = Process.runSync(_bin, _getArgsAll(files));
+        var output =
+            Process.runSync(_bin, _getArgsAll(_gitignore.filter(files)));
         return new FormatterResult(
             output.exitCode == 0, output.stdout, output.stderr);
       } else {
@@ -103,6 +114,9 @@ class CodeFormatter {
       final String pip,
       final String website})
       : _glob = new Glob(glob) {
+    // Create gitignore matcher.
+    _gitignore = new GitignoreMatcher('.gitignore', glob);
+
     // Generate installMessage.
     var installMessage =
         new StringBuffer("The program '${this._bin}' is not installed.");
@@ -120,6 +134,7 @@ class CodeFormatter {
     } else {
       installMessage.write('\n');
     }
+
     // Store installMessage.
     _installMessage = installMessage.toString();
   }
