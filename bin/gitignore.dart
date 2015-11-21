@@ -37,6 +37,33 @@ class GitignoreMatcher {
     return new List.from(input.where((String filepath) => !exclude(filepath)));
   }
 
+  /// Internal method used for parsing the `.gitignore` file.
+  void _parseGitignoreRule(String rule, Glob selector) {
+    // Check if this is an include rule.
+    bool forceInclude = rule.startsWith('!');
+    if (forceInclude) {
+      rule = rule.substring(1);
+    }
+
+    // Expand rule:
+    // - If the rule ends with `/`, add `**` to match all underlying files.
+    // - Else add a rule that also checks if the file is in a directory with
+    //   the specified name.
+    var rules = new List<Glob>();
+    if (rule.endsWith('/')) {
+      rules..add(new Glob(rule))..add(new Glob(rule + '**'));
+    } else {
+      rules..add(new Glob(rule))..add(new Glob(rule + '/**'));
+    }
+
+    // Insert rules
+    if (forceInclude) {
+      _include.addAll(rules);
+    } else {
+      _exclude.addAll(rules);
+    }
+  }
+
   /// The constructor will parse the given `.gitignore` file for rules that
   /// apply to the given glob.
   GitignoreMatcher(String path, String selector) {
@@ -51,13 +78,8 @@ class GitignoreMatcher {
 
       // Parse file.
       lines.forEach((String line) {
-        if (!(line.startsWith('#') || line.trimLeft().isEmpty) &&
-            glob.matches(line)) {
-          if (line.startsWith('!')) {
-            _include.add(new Glob(line.substring(1)));
-          } else {
-            _exclude.add(new Glob(line));
-          }
+        if (!(line.startsWith('#') || line.trimLeft().isEmpty)) {
+          _parseGitignoreRule(line, glob);
         }
       });
     }

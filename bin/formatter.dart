@@ -81,7 +81,7 @@ class CodeFormatter {
             output.exitCode == 0, output.stdout, output.stderr);
       } else {
         return new FormatterResult(
-            false, null, 'This file is excluded in your .gitignore file.');
+            false, null, 'This file is excluded in your .gitignore file.\n');
       }
     } else {
       return new FormatterResult(false, null, _installMessage);
