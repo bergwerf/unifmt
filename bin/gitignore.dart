@@ -38,7 +38,7 @@ class GitignoreMatcher {
   }
 
   /// Internal method used for parsing the `.gitignore` file.
-  void _parseGitignoreRule(String rule, Glob selector) {
+  void _parseGitignoreRule(String rule) {
     // Check if this is an include rule.
     bool forceInclude = rule.startsWith('!');
     if (forceInclude) {
@@ -64,12 +64,8 @@ class GitignoreMatcher {
     }
   }
 
-  /// The constructor will parse the given `.gitignore` file for rules that
-  /// apply to the given glob.
-  GitignoreMatcher(String path, String selector) {
-    // Create selector glob.
-    var glob = new Glob(selector);
-
+  /// The constructor will parse the given `.gitignore` file.
+  GitignoreMatcher(String path) {
     // Open file.
     var file = new File(path);
     if (file.existsSync()) {
@@ -79,7 +75,7 @@ class GitignoreMatcher {
       // Parse file.
       lines.forEach((String line) {
         if (!(line.startsWith('#') || line.trimLeft().isEmpty)) {
-          _parseGitignoreRule(line, glob);
+          _parseGitignoreRule(line);
         }
       });
     }

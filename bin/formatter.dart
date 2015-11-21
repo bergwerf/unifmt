@@ -115,7 +115,7 @@ class CodeFormatter {
       final String website})
       : _glob = new Glob(glob) {
     // Create gitignore matcher.
-    _gitignore = new GitignoreMatcher('.gitignore', glob);
+    _gitignore = new GitignoreMatcher('.gitignore');
 
     // Generate installMessage.
     var installMessage =
