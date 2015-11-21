@@ -47,11 +47,14 @@ class GitignoreMatcher {
 
     // Expand rule:
     // - If the rule ends with `/`, add `**` to match all underlying files.
+    // - If the rule ends with `/*`, add '*' to match all underlying files.
     // - Else add a rule that also checks if the file is in a directory with
     //   the specified name.
     var rules = new List<Glob>();
     if (rule.endsWith('/')) {
-      rules..add(new Glob(rule))..add(new Glob(rule + '**'));
+      rules.add(new Glob(rule + '**'));
+    } else if (rule.endsWith('/*')) {
+      rules.add(new Glob(rule + '*'));
     } else {
       rules..add(new Glob(rule))..add(new Glob(rule + '/**'));
     }

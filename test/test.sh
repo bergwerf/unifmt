@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # This is a very minimal test.
-# TODO: Cover more use cases and validate output.
+# TODO: Validate output.
+# TODO: Test `.gitignore`.
 
 # Descend to where the script location.
 cd "$(dirname "$0")"
