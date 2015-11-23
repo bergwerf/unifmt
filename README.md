@@ -30,3 +30,10 @@ molviewfmt --watch
 
 To get more output (info, warnings) when running `molviewfmt`, add the
 `--verbose` flag.
+
+Notes
+-----
+### Gitignore
+`molviewfmt` read the .gitignore file in the directory where it is executed and
+does not format files that are excluded in the .gitignore file. However,
+.gitignore files that are located in subdirectories will be ignored!

@@ -32,8 +32,9 @@ typedef List<String> FormatAllFilesArgs(final List<String> files);
 /// molviewfmt formatter base class
 ///
 /// Code should be formatted using a command-line application. By default
-/// [CodeFormatter] executes a shell script to format source files. You can
-/// override this class to implement special behaviour.
+/// [CodeFormatter] executes a binary to format source files. You can override
+/// this class to implement a special formatter that does not require an
+/// installed binary.
 class CodeFormatter {
   /// Name of the language this formatter can format.
   final String _language;
