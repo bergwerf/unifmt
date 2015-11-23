@@ -93,12 +93,18 @@ class CodeFormatter {
     var fileEntities = _glob.listSync(followLinks: false);
     if (fileEntities.length > 0) {
       if (checkInstallation()) {
-        var files = new List<String>.generate(
-            fileEntities.length, (int i) => fileEntities[i].path);
-        var output =
-            Process.runSync(_bin, _getArgsAll(_gitignore.filter(files)));
-        return new FormatterResult(
-            output.exitCode == 0, output.stdout, output.stderr);
+        // Generate and filter file list.
+        var files = _gitignore.filter(new List<String>.generate(
+            fileEntities.length, (int i) => fileEntities[i].path));
+
+        // Check if there are any files to be formatted.
+        if (!files.isEmpty) {
+          var output = Process.runSync(_bin, _getArgsAll(files));
+          return new FormatterResult(
+              output.exitCode == 0, output.stdout, output.stderr);
+        } else {
+          return new FormatterResult(true, null, null);
+        }
       } else {
         return new FormatterResult(false, null, _installMessage);
       }

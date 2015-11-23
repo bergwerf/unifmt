@@ -46,16 +46,29 @@ class GitignoreMatcher {
     }
 
     // Expand rule:
+    // - Always start with `/**/` to select inside any folder.
     // - If the rule ends with `/`, add `**` to match all underlying files.
     // - If the rule ends with `/*`, add '*' to match all underlying files.
     // - Else add a rule that also checks if the file is in a directory with
     //   the specified name.
     var rules = new List<Glob>();
+
+    // Add parent directory wildcard.
+    if (rule.startsWith('/')) {
+      rule = '/**' + rule;
+    } else {
+      rule = '/**/' + rule;
+    }
+
+    // Add child directory wildcard.
     if (rule.endsWith('/')) {
+      // Only include directory selector.
       rules.add(new Glob(rule + '**'));
     } else if (rule.endsWith('/*')) {
+      // Only include directory selector.
       rules.add(new Glob(rule + '*'));
     } else {
+      // Also include file selector.
       rules..add(new Glob(rule))..add(new Glob(rule + '/**'));
     }
 

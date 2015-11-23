@@ -16,7 +16,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // Dart formatter
   formatters.add(new CodeFormatter(
       'Dart',
-      '**/*.dart',
+      '**.dart',
       'dartfmt',
       (final String file) => ['-w', file],
       (final List<String> files) => files..insert(0, '-w'),
@@ -25,7 +25,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // Go formatter
   formatters.add(new CodeFormatter(
       'Go',
-      '**/*.go',
+      '**.go',
       'gofmt',
       (final String file) => ['-w', file],
       (final List<String> files) => files..insert(0, '-w')));
@@ -33,7 +33,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // Python formatter
   formatters.add(new CodeFormatter(
       'Python',
-      '**/*.py',
+      '**.py',
       'autopep8',
       (final String file) => ['-a', '-a', '-i', file],
       (final List<String> files) =>
@@ -43,7 +43,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // JavaScript formatter
   formatters.add(new CodeFormatter(
       'JavaScript',
-      '**/*.js',
+      '**.js',
       'standard',
       (final String file) => ['--format', file],
       (final List<String> files) => files..insert(0, '--format'),
@@ -57,7 +57,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // HTML formtter
   formatters.add(new CodeFormatter(
       'HTML',
-      '**/*.html',
+      '**.html',
       'tidy',
       (final String file) => ['-config', tidyConfigFile.path, file],
       (final List<String> files) =>
@@ -72,7 +72,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // CSS formatter
   formatters.add(new CodeFormatter(
       'CSS',
-      '**/*.css',
+      '**.css',
       'csscomb',
       (final String file) => ['--config', csscombConfigFile.path, file],
       (final List<String> files) =>
@@ -81,7 +81,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
   // Sass formatter
   formatters.add(new CodeFormatter(
       'Sass',
-      '**/*.scss',
+      '**.scss',
       'csscomb',
       (final String file) => ['--config', csscombConfigFile.path, file],
       (final List<String> files) =>
@@ -89,7 +89,7 @@ Future<Set<CodeFormatter>> getFormatters() async {
       npm: 'csscomb'));
 
   // Bash formatter
-  formatters.add(new CodeFormatter('Bash', '**/*.sh', 'bashbeautify',
+  formatters.add(new CodeFormatter('Bash', '**.sh', 'bashbeautify',
       (final String file) => [file], (final List<String> files) => files,
       pip: 'bashbeautify'));
 
