@@ -22,7 +22,11 @@ main(List<String> args) async {
     ..addFlag('watch',
         abbr: 'w',
         defaultsTo: false,
-        help: 'Watch current directory for changes and reformat them.');
+        help: 'Watch current directory for changes and reformat them.')
+    ..addOption('ignore',
+        defaultsTo: '',
+        allowMultiple: true,
+        help: 'Ignore the given file globs.');
 
   // Parse CLI args.
   final options = parser.parse(args);
@@ -31,7 +35,7 @@ main(List<String> args) async {
   final gitignoreGlob = new Glob('.gitignore');
 
   // Parse .gitignore for file matching.
-  var gitignore = new GitignoreMatcher('.gitignore');
+  var gitignore = getIgnoreMatcher(options['ignore']);
 
   // Create formatters.
   var formatters = await getFormatters();
@@ -52,7 +56,7 @@ main(List<String> args) async {
         // Check if this is the top-level gitignore file.
         if (gitignoreGlob.matches(event.path)) {
           // Reload .gitignore file.
-          gitignore = new GitignoreMatcher('.gitignore');
+          gitignore = getIgnoreMatcher(options['ignore']);
         } else {
           // Search for suitable formatter.
           for (CodeFormatter formatter in formatters) {
@@ -114,4 +118,17 @@ main(List<String> args) async {
       }
     }
   }
+}
+
+/// Helper function to create a new GitignoreMatcher that includes the globs
+/// that are ignored from the command line.
+GitignoreMatcher getIgnoreMatcher(List<String> extraExclude) {
+  var gitignore = new GitignoreMatcher('.gitignore');
+  for (String glob in extraExclude) {
+    // By default extraExclude includes one empty string.
+    if (glob.isNotEmpty) {
+      gitignore.addExclude(glob);
+    }
+  }
+  return gitignore;
 }

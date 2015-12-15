@@ -81,8 +81,8 @@ class CodeFormatter {
         return new FormatterResult(false, null, _installMessage);
       }
     } else {
-      return new FormatterResult(
-          false, null, 'This file is excluded in your .gitignore file.\n');
+      return new FormatterResult(false, null,
+          'This file is excluded in your .gitignore file or by the provided command-line parameters.\n');
     }
   }
 

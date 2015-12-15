@@ -11,6 +11,12 @@ class GitignoreMatcher {
   /// Force include these globs.
   List<Glob> _include = new List<Glob>();
 
+  /// Add exclude rule. This method is used by the molviewfmt main program to
+  /// hangle --ignore flags.
+  void addExclude(String glob) {
+    _exclude.add(new Glob(glob));
+  }
+
   /// Check if the given filepath should be excluded based on the gitignore
   /// rules.
   bool exclude(String filepath) {
