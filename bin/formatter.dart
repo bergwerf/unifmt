@@ -42,9 +42,6 @@ class CodeFormatter {
   /// Get _language.
   String get language => _language;
 
-  /// Gitignore rules for this language.
-  GitignoreMatcher _gitignore;
-
   /// Glob describing the source files that should be formatted by this
   /// formatter.
   final Glob _glob;
@@ -74,28 +71,29 @@ class CodeFormatter {
   /// This method is called when a file in the underlying directory is updated.
   /// It's up to the method to validate if it should format this file. If it
   /// does, it should return true.
-  FormatterResult formatOne(String filepath) {
-    if (checkInstallation()) {
-      if (!_gitignore.exclude(filepath)) {
+  FormatterResult formatOne(String filepath, GitignoreMatcher gitignore) {
+    if (!gitignore.exclude(filepath)) {
+      if (checkInstallation()) {
         var output = Process.runSync(_bin, _getArgsOne(filepath));
         return new FormatterResult(
             output.exitCode == 0, output.stdout, output.stderr);
       } else {
-        return new FormatterResult(
-            false, null, 'This file is excluded in your .gitignore file.\n');
+        return new FormatterResult(false, null, _installMessage);
       }
     } else {
-      return new FormatterResult(false, null, _installMessage);
+      return new FormatterResult(
+          false, null, 'This file is excluded in your .gitignore file.\n');
     }
   }
 
   /// Globs all files and runs the formatter.
-  FormatterResult formatAll() {
+  FormatterResult formatAll(GitignoreMatcher gitignore) {
+    // Retrieve all underlying files that match the given glob.
     var fileEntities = _glob.listSync(followLinks: false);
     if (fileEntities.length > 0) {
       if (checkInstallation()) {
         // Generate and filter file list.
-        var files = _gitignore.filter(new List<String>.generate(
+        var files = gitignore.filter(new List<String>.generate(
             fileEntities.length, (int i) => fileEntities[i].path));
 
         // Check if there are any files to be formatted.
@@ -121,9 +119,6 @@ class CodeFormatter {
       final String pip,
       final String website})
       : _glob = new Glob(glob) {
-    // Create gitignore matcher.
-    _gitignore = new GitignoreMatcher('.gitignore');
-
     // Generate installMessage.
     var installMessage =
         new StringBuffer("The program '${this._bin}' is not installed.");
