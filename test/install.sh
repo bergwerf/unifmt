@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Copyright (c) 2015, Herman Bergwerf. All rights reserved.
+# Use of this source code is governed by a MIT-style license
+# that can be found in the LICENSE file.
+
 # This script installs all formatters that are used by molviewfmt and can be
 # used to run all molviewfmt tests on TravisCI. This script can only be run on
 # Debian based environments and depends the following binaries:

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Copyright (c) 2015, Herman Bergwerf. All rights reserved.
+# Use of this source code is governed by a MIT-style license
+# that can be found in the LICENSE file.
+
 # Descend to the script location.
 cd "$(dirname "$0")"
 
@@ -48,12 +52,12 @@ do
   diff=$(diff -q "$file" "../data/out/$file")
   if [ -n "$diff" ]; then
     echo "$file was not formatted correctly."
-
+    
     # Clean up.
     cd ../
     rm -rf tmp
     rm data/in/ignore.* data/in/exclude.* data/out/ignore.* data/out/exclude.*
-
+    
     # Terminate.
     exit 1
   fi
