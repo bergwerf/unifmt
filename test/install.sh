@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 # This script installs all formatters that are used by molviewfmt and can be
 # used to run all molviewfmt tests on TravisCI. This script can only be run on

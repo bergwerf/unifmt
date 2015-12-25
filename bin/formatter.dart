@@ -189,9 +189,13 @@ class CodeFormatter {
     // Generate license notice.
     if (copyright.isNotEmpty && license.isNotEmpty) {
       var year = new DateTime.now().year;
+
+      // Decide indefinite article (i.e. 'a' or 'an').
+      var article = license.startsWith('/[aeiou]/') ? 'an' : 'a';
+
       _licenseHeader =
           '''$noticeStart${noticeLineStart}Copyright (c) $year, $copyright. All rights reserved.
-${noticeLineStart}Use of this source code is governed by an $license-style license
+${noticeLineStart}Use of this source code is governed by $article $license-style license
 ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     }
 
