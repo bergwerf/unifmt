@@ -19,6 +19,7 @@
 # Install gofmt.
 sudo apt-get install bison
 bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+source /home/travis/.gvm/scripts/gvm
 gvm install go1.5
 gvm use go1.5
 
