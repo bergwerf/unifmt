@@ -15,6 +15,8 @@ main(List<String> args) async {
   // Create CLI args parser.
   var parser = new ArgParser();
   parser
+    ..addFlag('help',
+        abbr: 'h', defaultsTo: false, help: 'Displays usage information.')
     ..addFlag('verbose',
         abbr: 'v',
         defaultsTo: false,
@@ -22,27 +24,29 @@ main(List<String> args) async {
     ..addFlag('force',
         abbr: 'f',
         defaultsTo: false,
-        help: 'Ignore errors in run-once mode (i.e. --watch is not set).')
+        help: 'Ignore errors in run-once mode (i.e. --no-watch).')
     ..addFlag('watch',
         abbr: 'w',
         defaultsTo: false,
         help: 'Watch current directory for changes and reformat them.')
     ..addOption('exclude',
-        abbr: 'e',
-        defaultsTo: '',
-        allowMultiple: true,
-        help: 'Ignore the given file globs.')
+        abbr: 'e', allowMultiple: true, help: 'Ignore the given file globs.')
     ..addOption('copyright',
-        abbr: 'c',
-        defaultsTo: '',
-        help: 'Set copyright holder for license headers.')
+        abbr: 'c', help: 'Set copyright holder for license headers.')
     ..addOption('license',
-        abbr: 'l',
-        defaultsTo: '',
-        help: 'Set SPDX license ID for license headers.');
+        abbr: 'l', help: 'Set SPDX license ID for license headers.');
 
   // Parse CLI args.
   final options = parser.parse(args);
+  final exclude = new List<String>.from(options['exclude']);
+
+  // If --help is specified display usage information and return.
+  if (options['help']) {
+    print(
+        'molviewfmt is a tool for automatically formatting code from various languages\n');
+    print(parser.usage);
+    return;
+  }
 
   // Output error if only one of the --copyright and --license options is set.
   // You should set both flags or not at all.
@@ -56,7 +60,7 @@ license headers to the files in your repository.''');
   final gitignoreGlob = new Glob('.gitignore');
 
   // Parse .gitignore for file matching.
-  var gitignore = getIgnoreMatcher(options['exclude']);
+  var gitignore = getIgnoreMatcher(exclude);
 
   // Create formatters.
   var formatters =
@@ -78,7 +82,7 @@ license headers to the files in your repository.''');
         // Check if this is the top-level gitignore file.
         if (gitignoreGlob.matches(event.path)) {
           // Reload .gitignore file.
-          gitignore = getIgnoreMatcher(options['exclude']);
+          gitignore = getIgnoreMatcher(exclude);
         } else {
           // Search for suitable formatter.
           for (CodeFormatter formatter in formatters) {
