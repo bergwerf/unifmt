@@ -24,12 +24,27 @@ main(List<String> args) async {
         defaultsTo: false,
         help: 'Watch current directory for changes and reformat them.')
     ..addOption('ignore',
+        abbr: 'i',
         defaultsTo: '',
         allowMultiple: true,
-        help: 'Ignore the given file globs.');
+        help: 'Ignore the given file globs.')
+    ..addOption('copyright',
+        abbr: 'c',
+        defaultsTo: '', help: 'Set copyright holder for license headers.')
+    ..addOption('license',
+        abbr: 'l',
+        defaultsTo: '', help: 'Set SPDX license ID for license headers.');
 
   // Parse CLI args.
   final options = parser.parse(args);
+
+  // Output error if only one of the --copyright and --license options is set.
+  // You should set both flags or not at all.
+  if ((options['copyright'].isNotEmpty || options['license'].isNotEmpty) &&
+      !(options['copyright'].isNotEmpty && options['license'].isNotEmpty)) {
+    print('''You should set both the --copyright AND the --license option to add
+license headers to the files in your repository.''');
+  }
 
   // Create glob for matching the top-level gitignore file.
   final gitignoreGlob = new Glob('.gitignore');
@@ -38,7 +53,8 @@ main(List<String> args) async {
   var gitignore = getIgnoreMatcher(options['ignore']);
 
   // Create formatters.
-  var formatters = await getFormatters();
+  var formatters =
+      await getFormatters(options['copyright'] ?? '', options['license'] ?? '');
 
   // Bootstrap formatters.
   if (options['watch']) {
@@ -114,6 +130,8 @@ main(List<String> args) async {
           stderr.writeln(
               'The ${formatter.language} formatter exited with a non-zero status.');
         }
+
+        // Exit because this way the user can examine all errors one by one.
         exit(1);
       }
     }
