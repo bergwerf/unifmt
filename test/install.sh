@@ -6,7 +6,7 @@
 # apt-get, bash, wget, dpkg, pip, npm
 
 # Update package database
-apt-get update
+sudo apt-get update
 
 # Install dart.
 # TravisCI can do this automatically (and supports matrix builds).
@@ -29,13 +29,12 @@ apt-get update
 
 # Install tidy.
 wget http://binaries.html-tidy.org/binaries/tidy-5.0.0/tidy-5.0.0-64bit.deb
-dpkg -i tidy-5.0.0-64bit.deb
+sudo dpkg -i tidy-5.0.0-64bit.deb
 
 # Install other formatters.
-pip install --upgrade requests[security]
-pip install --upgrade autopep8 bashbeautify
-apt-get install nodejs npm
-npm install -g standard csscomb --registry http://registry.npmjs.org/
+sudo -H pip install --upgrade requests[security]
+sudo -H pip install --upgrade autopep8 bashbeautify
+npm install -g standard csscomb
 
 # Install Bats.
 # The tests do not use Bats (yet). Bats can be used to add more complex tests.
