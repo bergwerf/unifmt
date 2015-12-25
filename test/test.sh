@@ -34,8 +34,9 @@ cd tmp
 touch empty.dart empty.js
 
 # Tests use -v by default to make debugging easier.
-# This also tests .gitignore and --exclude.
-dart ../../bin/molviewfmt.dart -v -e 'exclude.*' -c 'Herman Bergwerf' -l 'MIT'
+# This also tests .gitignore and --exclude and --force.
+# Note that --force is tested because the tidy DOCTYPE warning is skipped.
+dart ../../bin/molviewfmt.dart -f -v -e 'exclude.*' -c 'Herman Bergwerf' -l 'MIT'
 
 # Remove the bashbeautifier backup file (hello.sh~)
 rm hello.sh~

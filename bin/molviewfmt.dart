@@ -19,6 +19,10 @@ main(List<String> args) async {
         abbr: 'v',
         defaultsTo: false,
         help: 'Output non-critical formatting messages.')
+    ..addFlag('force',
+        abbr: 'f',
+        defaultsTo: false,
+        help: 'Ignore errors in run-once mode (i.e. --watch is not set).')
     ..addFlag('watch',
         abbr: 'w',
         defaultsTo: false,
@@ -133,8 +137,9 @@ license headers to the files in your repository.''');
               'The ${formatter.language} formatter exited with a non-zero status.');
         }
 
-        // Exit because this way the user can examine all errors one by one.
-        exit(1);
+        if (!options['force']) {
+          exit(1);
+        }
       }
     }
   }
