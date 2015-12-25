@@ -17,19 +17,27 @@ To install `molviewfmt` on your system, run:
 pub global activate molviewfmt
 ```
 
-### Run
-To format all underlying files, run:
-```
-molviewfmt
-```
+### Command line arguments
+#### -h, --[no-]help
+Displays usage information.
 
-To watch all underlying files for changes, run:
-```
-molviewfmt --watch
-```
+#### -v, --[no-]verbose
+Output non-critical formatting messages.
 
-To get more output (info, warnings) when running `molviewfmt`, add the
-`--verbose` flag.
+#### -f, --[no-]force
+Ignore errors in run-once mode (i.e. --no-watch).
+
+#### -w, --[no-]watch
+Watch current directory for changes and reformat them.
+
+#### -e, --exclude
+Exclude the given file globs.
+
+#### -c, --copyright
+Set copyright holder for license headers.
+
+#### -l, --license
+Set SPDX license ID for license headers.
 
 Notes
 -----

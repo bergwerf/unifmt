@@ -34,7 +34,7 @@ main(List<String> args) async {
         defaultsTo: false,
         help: 'Watch current directory for changes and reformat them.')
     ..addOption('exclude',
-        abbr: 'e', allowMultiple: true, help: 'Ignore the given file globs.')
+        abbr: 'e', allowMultiple: true, help: 'Exclude the given file globs.')
     ..addOption('copyright',
         abbr: 'c', help: 'Set copyright holder for license headers.')
     ..addOption('license',
