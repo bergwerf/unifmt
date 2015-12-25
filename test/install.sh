@@ -17,11 +17,12 @@
 #sudo apt-get install dart
 
 # Install gofmt.
-sudo apt-get install bison
-bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-source /home/travis/.gvm/scripts/gvm
-gvm install go1.5
-gvm use go1.5
+# Use default go installation from TravisCI.
+#sudo apt-get install bison
+#bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
+#source /home/travis/.gvm/scripts/gvm
+#gvm install go1.5
+#gvm use go1.5
 
 # Install tidy.
 wget http://binaries.html-tidy.org/binaries/tidy-5.0.0/tidy-5.0.0-64bit.deb
