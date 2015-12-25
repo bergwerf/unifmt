@@ -50,8 +50,8 @@ main(List<String> args) async {
 
   // Output error if only one of the --copyright and --license options is set.
   // You should set both flags or not at all.
-  if ((options['copyright'].isNotEmpty || options['license'].isNotEmpty) &&
-      !(options['copyright'].isNotEmpty && options['license'].isNotEmpty)) {
+  if (!(options['copyright'] == null && options['license'] == null) &&
+      !(options['copyright'] != null && options['license'] != null)) {
     print('''You should set both the --copyright AND the --license option to add
 license headers to the files in your repository.''');
   }
