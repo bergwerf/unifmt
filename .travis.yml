@@ -1,4 +1,5 @@
-language: dart
+sudo:      true
+language:  dart
 dart:
 - stable
 - dev
