@@ -29,7 +29,8 @@ wget http://binaries.html-tidy.org/binaries/tidy-5.0.0/tidy-5.0.0-64bit.deb
 sudo dpkg -i tidy-5.0.0-64bit.deb
 
 # Install other formatters.
-sudo pip install --upgrade autopep8 bashbeautify
+sudo -H pip install --upgrade autopep8 bashbeautify
+sudo apt-get install npm
 sudo npm install -g standard csscomb
 
 # Install Bats.
