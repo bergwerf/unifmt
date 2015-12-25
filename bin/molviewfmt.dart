@@ -23,17 +23,19 @@ main(List<String> args) async {
         abbr: 'w',
         defaultsTo: false,
         help: 'Watch current directory for changes and reformat them.')
-    ..addOption('ignore',
-        abbr: 'i',
+    ..addOption('exclude',
+        abbr: 'e',
         defaultsTo: '',
         allowMultiple: true,
         help: 'Ignore the given file globs.')
     ..addOption('copyright',
         abbr: 'c',
-        defaultsTo: '', help: 'Set copyright holder for license headers.')
+        defaultsTo: '',
+        help: 'Set copyright holder for license headers.')
     ..addOption('license',
         abbr: 'l',
-        defaultsTo: '', help: 'Set SPDX license ID for license headers.');
+        defaultsTo: '',
+        help: 'Set SPDX license ID for license headers.');
 
   // Parse CLI args.
   final options = parser.parse(args);
@@ -50,7 +52,7 @@ license headers to the files in your repository.''');
   final gitignoreGlob = new Glob('.gitignore');
 
   // Parse .gitignore for file matching.
-  var gitignore = getIgnoreMatcher(options['ignore']);
+  var gitignore = getIgnoreMatcher(options['exclude']);
 
   // Create formatters.
   var formatters =
@@ -72,7 +74,7 @@ license headers to the files in your repository.''');
         // Check if this is the top-level gitignore file.
         if (gitignoreGlob.matches(event.path)) {
           // Reload .gitignore file.
-          gitignore = getIgnoreMatcher(options['ignore']);
+          gitignore = getIgnoreMatcher(options['exclude']);
         } else {
           // Search for suitable formatter.
           for (CodeFormatter formatter in formatters) {
