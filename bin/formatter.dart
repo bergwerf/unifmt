@@ -89,7 +89,8 @@ class CodeFormatter {
     // Test for shebang.
     if (lines.length > 0 && lines.first.startsWith('#!')) {
       // Make sure there is an empty line after the shebang.
-      if (lines.length > 1 && !lines[1].isEmpty) {
+      // Add empty line if the second line is empty or none exists.
+      if ((lines.length > 1 && !lines[1].isEmpty) || lines.length == 1) {
         // Insert empty line after the shebang.
         lines.insert(1, '');
       }
@@ -116,9 +117,14 @@ class CodeFormatter {
     }
 
     // Insert license notice.
-    lines.insertAll(start, hlines);
+    // Note that a blank line is inserted after the license notice.
+    lines.insertAll(start, hlines..add(''));
+    // Trim end of the file contents.
+    // This is necessary if there were no contents after the license.
+    while (lines.last.isEmpty) {
+      lines.removeLast();
+    }
     // Write new content back into file.
-    // Note that a terminating newline is added.
     file.writeAsStringSync(lines.join('\n') + '\n');
   }
 
@@ -186,7 +192,7 @@ class CodeFormatter {
       _licenseHeader =
           '''$noticeStart${noticeLineStart}Copyright (c) $year, $copyright. All rights reserved.
 ${noticeLineStart}Use of this source code is governed by an $license-style license
-${noticeLineStart}that can be found in the LICENSE file.$noticeEnd\n\n''';
+${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     }
 
     // Generate installMessage.

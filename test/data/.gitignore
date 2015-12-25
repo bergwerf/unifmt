@@ -1,0 +1,11 @@
+ignore.*
+
+# Check if force include is also working.
+hello.*
+!hello.css
+!hello.dart
+!hello.go
+!hello.html
+!hello.js
+!hello.py
+!hello.sh

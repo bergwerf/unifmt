@@ -1,5 +1,5 @@
 #!/bin/bash
 # Git pre-commit hook
 
-molviewfmt
+#molviewfmt -e 'test/data/*'
 make check
