@@ -46,8 +46,11 @@ main(List<String> args) async {
 
   // If --help is specified display usage information and return.
   if (options['help']) {
-    print(
-        'molviewfmt is a tool for automatically formatting code from various languages\n');
+    print('''
+Usage: molviewfmt [flags] [options]
+
+Molviewfmt is a tool for automatically formatting code from various languages.
+''');
     print(parser.usage);
     return;
   }
