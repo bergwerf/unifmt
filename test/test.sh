@@ -24,6 +24,12 @@ cp data/in/hello.html data/in/ignore.html
 cp data/in/ignore.* data/out
 cp data/in/exclude.* data/out
 
+# Update copyright year in the out directory for the files that will get a new
+# license notice.
+year=$(date +'%Y')
+sed -i "s/Copyright (c) [0-9]*,/Copyright (c) $year,/g" data/out/empty.py \
+data/out/empty.sh data/out/hello.css data/out/hello.go data/out/hello.sh
+
 # Make temporary directory to run the tests.
 mkdir tmp
 cp data/.gitignore tmp/.gitignore
@@ -42,7 +48,7 @@ touch empty.dart empty.js
 # Note that --force is tested because the tidy DOCTYPE warning is skipped.
 dart ../../bin/molviewfmt.dart -fv -e 'exclude.*' -c 'Herman Bergwerf' -l 'MIT'
 
-# Remove the bashbeautifier backup file (hello.sh~)
+# Remove the bashbeautifier backup file (*~)
 rm hello.sh~
 
 # Compare all files one by one.
@@ -52,6 +58,7 @@ do
   diff=$(diff -q "$file" "../data/out/$file")
   if [ -n "$diff" ]; then
     echo "$file was not formatted correctly."
+    cat $file
     
     # Clean up.
     cd ../

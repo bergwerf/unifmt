@@ -34,6 +34,27 @@ typedef List<String> FormatOneFileArgs(final String filepath);
 /// specified in the [files] property).
 typedef List<String> FormatAllFilesArgs(final List<String> files);
 
+/// Class to store license variables for convenience.
+class LicenseVariables {
+  /// Copyright holder that is mentioned in the rendered license notice.
+  String copyrightHolder;
+
+  /// SPDX license ID that is mentioned in the license notice.
+  String licenseType;
+
+  /// RegExp pattern for the license notice. Used to detect outdated licenses.
+  String noticePattern;
+
+  /// Rendered license notice. Used to match the license and to append the
+  /// license. Only the license year is not rendered yet, it can be inserted
+  /// by replacing '$year' with the desired year.
+  String noticeRendered;
+
+  /// Number of lines between first license notice line and first license notice
+  /// pattern line.
+  int patternOffset = 0;
+}
+
 /// molviewfmt formatter base class
 ///
 /// Code should be formatted using a command-line application. By default
@@ -47,17 +68,21 @@ class CodeFormatter {
   /// Get _language.
   String get language => _language;
 
-  /// License header
+  /// License variables.
   ///
-  /// If this String is empty the program will not check for license headers.
-  String _licenseHeader = '';
+  /// All license variables are stored in this object for convenience.
+  LicenseVariables _license = null;
 
+  /// Source file selector
+  ///
   /// Glob describing the source files that should be formatted by this
   /// formatter.
   final Glob _glob;
 
-  /// Formatter binary name. This is used to valiadate the installation of the
-  /// formatter.
+  /// Formatter executable
+  ///
+  /// The name of the program that is used to format source files. Should be
+  /// in the $PATH.
   final String _bin;
 
   /// Generates script for formatting one file.
@@ -82,10 +107,11 @@ class CodeFormatter {
   /// will add one if none present.
   void addLicenseNotice(String filepath) {
     // Check if a license notice is defined.
-    if (_licenseHeader.isEmpty) {
+    if (_license == null) {
       return;
     }
 
+    // Open and read file.
     var file = new File(filepath);
     var lines = file.readAsLinesSync();
     var start = 0;
@@ -102,33 +128,81 @@ class CodeFormatter {
       start += 2;
     }
 
-    var hlines = LineSplitter.split(_licenseHeader).toList();
+    // Read license notice data into lists.
+    var rlines = LineSplitter.split(_license.noticeRendered).toList();
+    var plines = LineSplitter.split(_license.noticePattern).toList();
+    assert(rlines.length == plines.length);
+
+    // Determines if the lines should be written back into the file after the
+    // loop has finished. This is used to write back changes that are made to
+    // already existing license headers inside the loop.
+    var writeAfterLoop = false;
+
     // If lines.length is less than start + hlines.length, it can never contain
     // a valid license.
-    if (lines.length >= start + hlines.length) {
+    if (lines.length >= start + rlines.length) {
       // Match _licenseHeader.
-      for (var i = 0; i < hlines.length; i++) {
+      for (var i = 0; i < rlines.length; i++) {
         // The license notice is added by breaking out of this loop. This way
         // Files that contain no lines will also get a licence notice.
         // A license notice should be added when a mismatch it detected.
-        if (hlines[i] != lines[start + i]) {
-          break;
-        } else if (i == hlines.length - 1) {
+        if (rlines[i] != lines[start + i]) {
+          // First check if this maybe is a licence notice line after all, but
+          // it is outdated. If so, replace with an updated line from rlines.
+          // You can only check if this is a licence notice when you're inside
+          // the range of [_license.noticePattern].
+          if (i >= _license.patternOffset) {
+            var regex = new RegExp(plines[i - _license.patternOffset]);
+            var match = regex.firstMatch(lines[start + i]);
+            if (match != null) {
+              var line = rlines[i];
+
+              // If this is the first pattern line, it contains the year.
+              // Replace '$year' from the rendered line with this year.
+              if (i - _license.patternOffset == 0) {
+                line = line.replaceFirst(r'$year', match.group(1));
+              }
+              lines[start + i] = line;
+
+              // Write lines back into file when the loop is finished.
+              writeAfterLoop = true;
+            } else {
+              // No match so break and add new license notice.
+              break;
+            }
+          } else {
+            // Not in the pattern range so break and add new license notice.
+            break;
+          }
+        }
+        if (i == rlines.length - 1) {
           // This was the last line, terminate the method.
+          if (writeAfterLoop) {
+            // Note that a terminating newline is added.
+            file.writeAsStringSync(lines.join('\n') + '\n');
+          }
           return;
         }
       }
     }
 
-    // Insert license notice.
+    // Insert new license notice.
+
+    // Get rendered license notice with current year.
+    _license.noticeRendered = _license.noticeRendered
+        .replaceFirst(r'$year', new DateTime.now().year.toString());
+
     // Note that a blank line is inserted after the license notice.
-    lines.insertAll(start, hlines..add(''));
+    lines.insertAll(
+        start, LineSplitter.split(_license.noticeRendered).toList()..add(''));
+
     // Trim end of the file contents.
     // This is necessary if there were no contents after the license.
     while (lines.last.isEmpty) {
       lines.removeLast();
     }
     // Write new content back into file.
+    // Note that a terminating newline is added.
     file.writeAsStringSync(lines.join('\n') + '\n');
   }
 
@@ -190,17 +264,30 @@ class CodeFormatter {
       final String copyright: '',
       final String license: ''})
       : _glob = new Glob(glob) {
-    // Generate license notice.
+    // Generate license notice pattern.
     if (copyright.isNotEmpty && license.isNotEmpty) {
-      var year = new DateTime.now().year;
+      _license = new LicenseVariables();
+      _license.copyrightHolder = copyright;
+      _license.licenseType = license;
+
+      // Generate license notice pattern.
+      _license.noticePattern = '''
+Copyright \\(c\\) ([0-9]+), .*\\. All rights reserved\.
+Use of this source code is governed by an? .*-style license
+that can be found in the LICENSE file\\.''';
 
       // Decide indefinite article (i.e. 'a' or 'an').
       var article = license.startsWith('/[aeiou]/') ? 'an' : 'a';
 
-      _licenseHeader =
-          '''$noticeStart${noticeLineStart}Copyright (c) $year, $copyright. All rights reserved.
+      // Generate license notice.
+      _license.noticeRendered = '''
+$noticeStart${noticeLineStart}Copyright (c) \$year, $copyright. All rights reserved.
 ${noticeLineStart}Use of this source code is governed by $article $license-style license
 ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
+
+      // Find the offset between the rendered license notice and the license
+      // notice pattern.
+      _license.patternOffset = new RegExp(r'\n').allMatches(noticeStart).length;
     }
 
     // Generate installMessage.
