@@ -189,12 +189,12 @@ class CodeFormatter {
     // Insert new license notice.
 
     // Get rendered license notice with current year.
-    _license.noticeRendered = _license.noticeRendered
+    var noticeRendered = _license.noticeRendered
         .replaceFirst(r'$year', new DateTime.now().year.toString());
 
     // Note that a blank line is inserted after the license notice.
     lines.insertAll(
-        start, LineSplitter.split(_license.noticeRendered).toList()..add(''));
+        start, LineSplitter.split(noticeRendered).toList()..add(''));
 
     // Trim end of the file contents.
     // This is necessary if there were no contents after the license.

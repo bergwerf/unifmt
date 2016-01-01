@@ -4,6 +4,13 @@
 # Use of this source code is governed by a MIT-style license
 # that can be found in the LICENSE file.
 
+# Notes about the things that are tested are spread trough this bash script.
+# Some additional notes are below.
+# - empty.css and hello.js contain a wrong copyright holder to test if this is
+#   the correct copyright holder is successfully substituted.
+# - empty.css is used to test if no extra licese header is added if a file only
+#   contains a license header.
+
 # Descend to the script location.
 cd "$(dirname "$0")"
 
@@ -28,7 +35,8 @@ cp data/in/exclude.* data/out
 # license notice.
 year=$(date +'%Y')
 sed -i "s/Copyright (c) [0-9]*,/Copyright (c) $year,/g" data/out/empty.py \
-data/out/empty.sh data/out/hello.css data/out/hello.go data/out/hello.sh
+data/out/empty.sh data/out/hello.css data/out/hello.go data/out/hello.sh \
+data/out/empty.dart data/out/empty.js
 
 # Make temporary directory to run the tests.
 mkdir tmp
@@ -39,8 +47,7 @@ cd tmp
 # Create non-executable empty files.
 # Executable files are commited into the repo because they include a shebang.
 # Note that Go is not tested for empty files because gofmt does not tolerate an
-# empty file. Also note that empty.css is used to test if no licese header is
-# added if a file only contains a license header.
+# empty file.
 touch empty.dart empty.js
 
 # Tests use -v by default to make debugging easier.
@@ -51,26 +58,34 @@ dart ../../bin/molviewfmt.dart -fv -e 'exclude.*' -c 'Herman Bergwerf' -l 'MIT'
 # Remove the bashbeautifier backup file (*~)
 rm hello.sh~
 
+# Clean up.
+function cleanUp {
+  # Remove temporary test files.
+  rm -rf tmp
+  rm data/in/ignore.* data/in/exclude.* data/out/ignore.* data/out/exclude.*
+  
+  # Change out files copyright year back to 2015 so no changes have to be
+  # committed.
+  sed -i "s/Copyright (c) [0-9]*,/Copyright (c) 2015,/g" data/out/empty.py \
+  data/out/empty.sh data/out/hello.css data/out/hello.go data/out/hello.sh \
+  data/out/empty.dart data/out/empty.js
+}
+
 # Compare all files one by one.
 for file in *
 do
   echo "Checking $file"
-  diff=$(diff -q "$file" "../data/out/$file")
-  if [ -n "$diff" ]; then
+  diffout=$(diff -q "$file" "../data/out/$file")
+  if [ -n "$diffout" ]; then
     echo "$file was not formatted correctly."
-    cat $file
-    
-    # Clean up.
-    cd ../
-    rm -rf tmp
-    rm data/in/ignore.* data/in/exclude.* data/out/ignore.* data/out/exclude.*
+    diff "$file" "../data/out/$file"
     
     # Terminate.
+    cd ../
+    cleanUp
     exit 1
   fi
 done
 
-# Clean up.
 cd ../
-rm -rf tmp
-rm data/in/ignore.* data/in/exclude.* data/out/ignore.* data/out/exclude.*
+cleanUp
