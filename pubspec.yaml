@@ -6,7 +6,7 @@ homepage:      https://github.com/molview/molviewfmt
 executables:
   molviewfmt:  molviewfmt
 environment:
-  sdk:         ">=1.8.0 <2.0.0"
+  sdk:         '>=1.8.0 <2.0.0'
 dependencies:
   args:        ^0.13.2
   glob:        ^1.0.5
