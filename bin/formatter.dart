@@ -277,7 +277,7 @@ Use of this source code is governed by an? .*-style license
 that can be found in the LICENSE file\\.''';
 
       // Decide indefinite article (i.e. 'a' or 'an').
-      var article = license.startsWith('/[aeiou]/') ? 'an' : 'a';
+      var article = license.startsWith(new RegExp('[AaEeIiOoUu]')) ? 'an' : 'a';
 
       // Generate license notice.
       _license.noticeRendered = '''
