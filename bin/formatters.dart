@@ -60,11 +60,11 @@ Future<Set<CodeFormatter>> getFormatters(
   formatters.add(new CodeFormatter(
       'JavaScript',
       '**.js',
-      'standard',
-      (final String file) => ['--format', file],
+      'standard-format',
+      (final String file) => ['-w', file],
       (final List<String> files) =>
-          new List<String>.from(files)..insert(0, '--format'),
-      npm: 'standard',
+          new List<String>.from(files)..insert(0, '-w'),
+      npm: 'standard-format',
       noticeLineStart: '// ',
       copyright: copyright,
       license: license));

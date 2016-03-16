@@ -38,7 +38,7 @@ sudo dpkg -i tidy-5.0.0-64bit.deb
 # Install other formatters.
 sudo -H pip install --upgrade requests[security]
 sudo -H pip install --upgrade autopep8 bashbeautify
-npm install -g standard csscomb
+npm install -g standard-format csscomb
 
 # Install Bats.
 # The tests do not use Bats (yet). Bats can be used to add more complex tests.
