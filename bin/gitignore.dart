@@ -15,6 +15,23 @@ class GitignoreMatcher {
   /// Force include these globs.
   List<Glob> _include = new List<Glob>();
 
+  /// The constructor will parse the given `.gitignore` file.
+  GitignoreMatcher(String path) {
+    // Open file.
+    var file = new File(path);
+    if (file.existsSync()) {
+      // Read file.
+      List<String> lines = file.readAsLinesSync();
+
+      // Parse file.
+      lines.forEach((String line) {
+        if (!(line.startsWith('#') || line.trimLeft().isEmpty)) {
+          _parseGitignoreRule(line);
+        }
+      });
+    }
+  }
+
   /// Add exclude rule. This method is used by the molviewfmt main program to
   /// hangle --ignore flags.
   void addExclude(String glob) {
@@ -87,23 +104,6 @@ class GitignoreMatcher {
       _include.addAll(rules);
     } else {
       _exclude.addAll(rules);
-    }
-  }
-
-  /// The constructor will parse the given `.gitignore` file.
-  GitignoreMatcher(String path) {
-    // Open file.
-    var file = new File(path);
-    if (file.existsSync()) {
-      // Read file.
-      List<String> lines = file.readAsLinesSync();
-
-      // Parse file.
-      lines.forEach((String line) {
-        if (!(line.startsWith('#') || line.trimLeft().isEmpty)) {
-          _parseGitignoreRule(line);
-        }
-      });
     }
   }
 }

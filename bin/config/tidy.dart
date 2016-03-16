@@ -9,6 +9,9 @@ class TidyConfigGenerator {
   /// Store configuration map.
   Map<String, dynamic> _config;
 
+  /// Constructor
+  TidyConfigGenerator() : _config = new Map<String, dynamic>();
+
   /// Set option.
   void set(String key, dynamic value) {
     _config[key] = value;
@@ -22,8 +25,6 @@ class TidyConfigGenerator {
     });
     return data.toString();
   }
-
-  TidyConfigGenerator() : _config = new Map<String, dynamic>() {}
 }
 
 /// Generate default tidy config.

@@ -24,7 +24,7 @@ class FormatterResult {
   String stderr;
 
   /// Create FormatterResult.
-  FormatterResult(this.success, this.stdout, this.stderr) {}
+  FormatterResult(this.success, this.stdout, this.stderr);
 }
 
 /// Get formatter arguments to format the specified file.
@@ -63,15 +63,12 @@ class LicenseVariables {
 /// installed binary.
 class CodeFormatter {
   /// Name of the language this formatter can format.
-  final String _language;
-
-  /// Get _language.
-  String get language => _language;
+  final String language;
 
   /// License variables.
   ///
   /// All license variables are stored in this object for convenience.
-  LicenseVariables _license = null;
+  LicenseVariables _license;
 
   /// Source file selector
   ///
@@ -93,6 +90,67 @@ class CodeFormatter {
 
   /// This message is displayed when the formatter is not installed.
   String _installMessage;
+
+  /// Constructor
+  CodeFormatter(this.language, final String glob, this._bin, this._getArgsOne,
+      this._getArgsAll,
+      {final String pub,
+      final String npm,
+      final String pip,
+      final String website,
+      final String noticeStart: '',
+      final String noticeLineStart: '',
+      final String noticeEnd: '',
+      final String copyright: '',
+      final String license: ''})
+      : _glob = new Glob(glob) {
+    // Generate license notice pattern.
+    if (copyright.isNotEmpty && license.isNotEmpty) {
+      _license = new LicenseVariables();
+      _license.copyrightHolder = copyright;
+      _license.licenseType = license;
+
+      // Generate license notice pattern.
+      _license.noticePattern = '''
+Copyright \\(c\\) ([0-9]+), .*\\. All rights reserved\.
+Use of this source code is governed by an? .*-style license
+that can be found in the LICENSE file\\.''';
+
+      // Decide indefinite article (i.e. 'a' or 'an').
+      var article = license.startsWith(new RegExp('[AaEeIiOoUu]')) ? 'an' : 'a';
+
+      // Generate license notice.
+      _license.noticeRendered = '''
+$noticeStart${noticeLineStart}Copyright (c) \$year, $copyright. All rights reserved.
+${noticeLineStart}Use of this source code is governed by $article $license-style license
+${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
+
+      // Find the offset between the rendered license notice and the license
+      // notice pattern.
+      _license.patternOffset = new RegExp(r'\n').allMatches(noticeStart).length;
+    }
+
+    // Generate installMessage.
+    var installMessage =
+        new StringBuffer("The program '${this._bin}' is not installed.");
+    if (pub != null) {
+      installMessage.write(' You can install it by typing:\n');
+      installMessage.writeln('pub global activate $pub');
+    } else if (npm != null) {
+      installMessage.write(' You can install it by typing:\n');
+      installMessage.writeln('npm install $npm -g');
+    } else if (pip != null) {
+      installMessage.write(' You can install it by typing:\n');
+      installMessage.writeln('pip install --upgrade $pip');
+    } else if (website != null) {
+      installMessage.writeln(' See $website for installation instructions.');
+    } else {
+      installMessage.write('\n');
+    }
+
+    // Store installMessage.
+    _installMessage = installMessage.toString();
+  }
 
   /// Checks if the given filepath can be formated by this formatter.
   bool canFormat(String filepath) {
@@ -120,7 +178,7 @@ class CodeFormatter {
     if (lines.length > 0 && lines.first.startsWith('#!')) {
       // Make sure there is an empty line after the shebang.
       // Add empty line if the second line is empty or none exists.
-      if ((lines.length > 1 && !lines[1].isEmpty) || lines.length == 1) {
+      if ((lines.length > 1 && lines[1].isNotEmpty) || lines.length == 1) {
         // Insert empty line after the shebang.
         lines.insert(1, '');
       }
@@ -236,7 +294,7 @@ class CodeFormatter {
             fileEntities.length, (int i) => fileEntities[i].path));
 
         // Check if there are any files to be formatted.
-        if (!files.isEmpty) {
+        if (files.isNotEmpty) {
           var output = Process.runSync(_bin, _getArgsAll(files));
           files.forEach((String filepath) => addLicenseNotice(filepath));
           return new FormatterResult(
@@ -250,65 +308,5 @@ class CodeFormatter {
     } else {
       return new FormatterResult(true, null, null);
     }
-  }
-
-  CodeFormatter(this._language, final String glob, this._bin, this._getArgsOne,
-      this._getArgsAll,
-      {final String pub,
-      final String npm,
-      final String pip,
-      final String website,
-      final String noticeStart: '',
-      final String noticeLineStart: '',
-      final String noticeEnd: '',
-      final String copyright: '',
-      final String license: ''})
-      : _glob = new Glob(glob) {
-    // Generate license notice pattern.
-    if (copyright.isNotEmpty && license.isNotEmpty) {
-      _license = new LicenseVariables();
-      _license.copyrightHolder = copyright;
-      _license.licenseType = license;
-
-      // Generate license notice pattern.
-      _license.noticePattern = '''
-Copyright \\(c\\) ([0-9]+), .*\\. All rights reserved\.
-Use of this source code is governed by an? .*-style license
-that can be found in the LICENSE file\\.''';
-
-      // Decide indefinite article (i.e. 'a' or 'an').
-      var article = license.startsWith(new RegExp('[AaEeIiOoUu]')) ? 'an' : 'a';
-
-      // Generate license notice.
-      _license.noticeRendered = '''
-$noticeStart${noticeLineStart}Copyright (c) \$year, $copyright. All rights reserved.
-${noticeLineStart}Use of this source code is governed by $article $license-style license
-${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
-
-      // Find the offset between the rendered license notice and the license
-      // notice pattern.
-      _license.patternOffset = new RegExp(r'\n').allMatches(noticeStart).length;
-    }
-
-    // Generate installMessage.
-    var installMessage =
-        new StringBuffer("The program '${this._bin}' is not installed.");
-    if (pub != null) {
-      installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('pub global activate $pub');
-    } else if (npm != null) {
-      installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('npm install $npm -g');
-    } else if (pip != null) {
-      installMessage.write(' You can install it by typing:\n');
-      installMessage.writeln('pip install --upgrade $pip');
-    } else if (website != null) {
-      installMessage.writeln(' See $website for installation instructions.');
-    } else {
-      installMessage.write('\n');
-    }
-
-    // Store installMessage.
-    _installMessage = installMessage.toString();
   }
 }

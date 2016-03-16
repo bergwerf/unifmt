@@ -11,6 +11,9 @@ class CSSCombConfigGenerator {
   /// Store configuration map.
   Map<String, dynamic> _config;
 
+  /// Constructor
+  CSSCombConfigGenerator() : _config = new Map<String, dynamic>();
+
   /// Set option.
   void set(String key, dynamic value) {
     _config[key] = value;
@@ -21,8 +24,6 @@ class CSSCombConfigGenerator {
     var encoder = new JsonEncoder();
     return encoder.convert(_config);
   }
-
-  CSSCombConfigGenerator() : _config = new Map<String, dynamic>() {}
 }
 
 /// Generate default csscomb config.

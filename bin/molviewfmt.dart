@@ -15,7 +15,7 @@ import 'formatter.dart';
 import 'formatters.dart';
 import 'gitignore.dart';
 
-main(List<String> args) async {
+Future main(List<String> args) async {
   // Create CLI args parser.
   var parser = new ArgParser();
   parser
@@ -82,7 +82,7 @@ license headers to the files in your repository.''');
     StreamSubscription subscription;
 
     // Handle watch events.
-    onWatchEvent(WatchEvent event) async {
+    Future onWatchEvent(WatchEvent event) async {
       // Only handle file updates.
       if (event.type == ChangeType.MODIFY) {
         print(event);
