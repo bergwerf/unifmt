@@ -36,7 +36,8 @@ cp data/in/exclude.* data/out
 year=$(date +'%Y')
 sed -i "s/Copyright (c) [0-9]*,/Copyright (c) $year,/g" data/out/empty.py \
 data/out/empty.sh data/out/hello.css data/out/hello.go data/out/hello.sh \
-data/out/empty.dart data/out/empty.js
+data/out/empty.dart data/out/empty.js data/out/hello.c data/out/hello.h \
+data/out/hello.cpp data/out/hello.hpp
 
 # Make temporary directory to run the tests.
 mkdir tmp
@@ -68,7 +69,8 @@ function cleanUp {
   # committed.
   sed -i "s/Copyright (c) [0-9]*,/Copyright (c) 2015,/g" data/out/empty.py \
   data/out/empty.sh data/out/hello.css data/out/hello.go data/out/hello.sh \
-  data/out/empty.dart data/out/empty.js
+  data/out/empty.dart data/out/empty.js data/out/hello.c data/out/hello.h \
+  data/out/hello.cpp data/out/hello.hpp
 }
 
 # Compare all files one by one.

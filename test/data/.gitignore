@@ -2,6 +2,10 @@ ignore.*
 
 # Check if force include is also working.
 hello.*
+!hello.h
+!hello.hpp
+!hello.c
+!hello.cpp
 !hello.css
 !hello.dart
 !hello.go

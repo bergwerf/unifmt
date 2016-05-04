@@ -18,6 +18,18 @@ Future<Set<CodeFormatter>> getFormatters(
   // Create formatters.
   var formatters = new Set<CodeFormatter>();
 
+  // C++ formatter
+  formatters.add(new CodeFormatter(
+      'C/C++',
+      '{**.c,**.h,**.cpp,**.hpp}',
+      'astyle',
+      (final String file) => ['-nA14s2', file],
+      (final List<String> files) =>
+          new List<String>.from(files)..insert(0, '-nA14s2'),
+      noticeLineStart: '// ',
+      copyright: copyright,
+      license: license));
+
   // Dart formatter
   formatters.add(new CodeFormatter(
       'Dart',
