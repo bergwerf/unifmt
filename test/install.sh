@@ -39,7 +39,10 @@ sudo dpkg -i tidy-5.0.0-64bit.deb
 sudo -H pip install --upgrade requests[security]
 sudo -H pip install --upgrade autopep8 bashbeautify
 npm install -g standard-format csscomb
-sudo apt-get install astyle
+
+# Install newer version of astyle
+wget archive.ubuntu.com/ubuntu/pool/universe/a/astyle/astyle_2.05.1-0ubuntu1_amd64.deb
+sudo dpkg -i astyle_2.05.1-0ubuntu1_amd64.deb
 astyle --version
 
 # Install Bats.
