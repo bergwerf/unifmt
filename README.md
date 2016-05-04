@@ -1,7 +1,6 @@
 molviewfmt
 ==========
 [![Pub Package](https://img.shields.io/pub/v/molviewfmt.svg)](https://pub.dartlang.org/packages/molviewfmt)
-[![Build Status](https://travis-ci.org/molview/molviewfmt.svg?branch=dev)](https://travis-ci.org/molview/molviewfmt/)
 
 The universal code formatter for the MolView project. This program automatically
 formats all code in the current directory to match the style conventions. You
