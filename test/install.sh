@@ -41,8 +41,7 @@ sudo -H pip install --upgrade autopep8 bashbeautify
 npm install -g standard-format csscomb
 
 # Install newer version of astyle
-wget archive.ubuntu.com/ubuntu/pool/universe/a/astyle/astyle_2.05.1-0ubuntu1_amd64.deb
-sudo dpkg -i astyle_2.05.1-0ubuntu1_amd64.deb
+sudo apt-get install astyle
 astyle --version
 
 # Install Bats.
