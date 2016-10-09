@@ -54,7 +54,7 @@ touch empty.dart empty.js
 # Tests use -v by default to make debugging easier.
 # This also tests .gitignore and --exclude and --force.
 # Note that --force is tested because the tidy DOCTYPE warning is skipped.
-dart ../../bin/molviewfmt.dart -fv -e 'exclude.*' -c 'Herman Bergwerf' -l 'MIT'
+dart ../../bin/unifmt.dart -fv -e 'exclude.*' -c 'Herman Bergwerf' -l 'MIT'
 
 # Remove the bashbeautifier backup file (*~)
 rm hello.sh~
@@ -64,7 +64,7 @@ function cleanUp {
   # Remove temporary test files.
   rm -rf tmp
   rm data/in/ignore.* data/in/exclude.* data/out/ignore.* data/out/exclude.*
-  
+
   # Change out files copyright year back to 2015 so no changes have to be
   # committed.
   sed -i "s/Copyright (c) [0-9]*,/Copyright (c) 2015,/g" data/out/empty.py \
@@ -81,7 +81,7 @@ do
   if [ -n "$diffout" ]; then
     echo "$file was not formatted correctly."
     diff "$file" "../data/out/$file"
-    
+
     # Terminate.
     cd ../
     cleanUp

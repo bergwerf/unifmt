@@ -1,6 +1,6 @@
-molviewfmt
-==========
-[![Pub Package](https://img.shields.io/pub/v/molviewfmt.svg)](https://pub.dartlang.org/packages/molviewfmt)
+unifmt
+======
+[![Pub Package](https://img.shields.io/pub/v/unifmt.svg)](https://pub.dartlang.org/packages/unifmt)
 
 The universal code formatter for the MolView project. This program automatically
 formats all code in the current directory to match the style conventions. You
@@ -11,9 +11,9 @@ system.
 Getting started
 ---------------
 ### Install
-To install `molviewfmt` on your system, run:
+To install `unifmt` on your system, run:
 ```
-pub global activate molviewfmt
+pub global activate unifmt
 ```
 
 ### Command line arguments
@@ -41,6 +41,6 @@ Set SPDX license ID for license headers.
 Notes
 -----
 ### Gitignore
-`molviewfmt` parses the `.gitignore` file in the directory where it is executed
+`unifmt` parses the `.gitignore` file in the directory where it is executed
 and does not format files that are excluded in the `.gitignore` file. However,
 `.gitignore` files that are located in subdirectories are not parsed!

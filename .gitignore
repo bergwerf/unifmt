@@ -4,17 +4,23 @@
 
 *~
 
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
 # KDE directory preferences
 .directory
 
 # Linux trash folder which might appear on any partition or disk
 .Trash-*
 
-###############
-# OSX.gitignore
-###############
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
 
-.DS_Store
+#################
+# macOS.gitignore
+#################
+
+*.DS_Store
 .AppleDouble
 .LSOverride
 
@@ -32,6 +38,7 @@ Icon
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
+.com.apple.timemachine.donotpresent
 
 # Directories potentially created on remote AFP share
 .AppleDB
@@ -70,4 +77,4 @@ doc/api/
 
 # Don't commit pubspec lock file
 # (Library packages only! Remove pattern if developing an application package)
-#pubspec.lock
+pubspec.lock

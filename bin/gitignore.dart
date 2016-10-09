@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-library molviewfmt.gitignore;
+library unifmt.gitignore;
 
 import 'dart:io';
 
@@ -32,7 +32,7 @@ class GitignoreMatcher {
     }
   }
 
-  /// Add exclude rule. This method is used by the molviewfmt main program to
+  /// Add exclude rule. This method is used by the unifmt main program to
   /// hangle --ignore flags.
   void addExclude(String glob) {
     _exclude.add(new Glob(glob));

@@ -82,9 +82,8 @@ Future<Set<CodeFormatter>> getFormatters(
       license: license));
 
   // Write tidy configuration to temporary file.
-  var tidyConfigFile =
-      await new File('${systemTmpDir.path}/molviewfmt/tidy.yaml')
-          .create(recursive: true);
+  var tidyConfigFile = await new File('${systemTmpDir.path}/unifmt/tidy.yaml')
+      .create(recursive: true);
   await tidyConfigFile.writeAsString(getDefaultTidyConfig());
   // HTML formtter
   formatters.add(new CodeFormatter(
@@ -98,7 +97,7 @@ Future<Set<CodeFormatter>> getFormatters(
 
   // Write csscomb configuration to temporary file.
   var csscombConfigFile =
-      await new File('${systemTmpDir.path}/molviewfmt/csscomb.json')
+      await new File('${systemTmpDir.path}/unifmt/csscomb.json')
           .create(recursive: true);
   await csscombConfigFile.writeAsString(getDefaultCSSCombConfig());
   // CSS formatter

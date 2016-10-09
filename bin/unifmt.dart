@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-/// molviewfmt command-line tool
+/// unifmt command-line tool
 
 import 'dart:io';
 import 'dart:async';
@@ -47,9 +47,9 @@ Future main(List<String> args) async {
   // If --help is specified display usage information and return.
   if (options['help']) {
     print('''
-Usage: molviewfmt [flags] [options]
+Usage: unifmt [flags] [options]
 
-Molviewfmt is a tool for automatically formatting code from various languages.
+Unifmt is a tool for automatically formatting code from various languages.
 ''');
     print(parser.usage);
     return;

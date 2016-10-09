@@ -2,7 +2,7 @@
 // Use of this source code is governed by a MIT-style license
 // that can be found in the LICENSE file.
 
-library molviewfmt;
+library unifmt;
 
 import 'dart:io';
 import 'dart:convert';
@@ -55,7 +55,7 @@ class LicenseVariables {
   int patternOffset = 0;
 }
 
-/// molviewfmt formatter base class
+/// unifmt formatter base class
 ///
 /// Code should be formatted using a command-line application. By default
 /// [CodeFormatter] executes a binary to format source files. You can override

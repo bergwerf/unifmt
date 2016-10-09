@@ -4,5 +4,5 @@
 # Use of this source code is governed by a MIT-style license
 # that can be found in the LICENSE file.
 
-molviewfmt -e 'test/data/**/*' -c 'Herman Bergwerf' -l 'MIT'
+unifmt -e 'test/data/**/*' -c 'Herman Bergwerf' -l 'MIT'
 make check

@@ -4,8 +4,8 @@
 # Use of this source code is governed by a MIT-style license
 # that can be found in the LICENSE file.
 
-# This script installs all formatters that are used by molviewfmt and can be
-# used to run all molviewfmt tests on TravisCI. This script can only be run on
+# This script installs all formatters that are used by unifmt and can be
+# used to run all unifmt tests on TravisCI. This script can only be run on
 # Debian based environments and depends the following binaries:
 # apt-get, bash, wget, dpkg, pip, npm
 
