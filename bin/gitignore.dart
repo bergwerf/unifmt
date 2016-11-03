@@ -9,11 +9,15 @@ import 'dart:io';
 import 'package:glob/glob.dart';
 
 class GitignoreMatcher {
-  /// Ignore these globs.
+  /// Exclude these globs.
   List<Glob> _exclude = new List<Glob>();
 
   /// Force include these globs.
   List<Glob> _include = new List<Glob>();
+
+  /// Force exclude these globs, used so that --exclude is more important than
+  /// [_include]. A cleaner solution would be using priorities but this is easy.
+  List<Glob> _forceExclude = new List<Glob>();
 
   /// The constructor will parse the given `.gitignore` file.
   GitignoreMatcher(String path) {
@@ -33,14 +37,21 @@ class GitignoreMatcher {
   }
 
   /// Add exclude rule. This method is used by the unifmt main program to
-  /// hangle --ignore flags.
-  void addExclude(String glob) {
-    _exclude.add(new Glob(glob));
+  /// hangle --exclude flags.
+  void addForcedExclude(String glob) {
+    _forceExclude.add(new Glob(glob));
   }
 
   /// Check if the given filepath should be excluded based on the gitignore
   /// rules.
   bool exclude(String filepath) {
+    // Try to find force exclude rule.
+    for (var i = 0; i < _forceExclude.length; i++) {
+      if (_forceExclude[i].matches(filepath)) {
+        return true;
+      }
+    }
+
     // Try to find include rule.
     for (var i = 0; i < _include.length; i++) {
       if (_include[i].matches(filepath)) {

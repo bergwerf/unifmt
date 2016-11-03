@@ -163,7 +163,7 @@ GitignoreMatcher getIgnoreMatcher(List<String> extraExclude) {
   for (String glob in extraExclude) {
     // By default extraExclude includes one empty string.
     if (glob.isNotEmpty) {
-      gitignore.addExclude(glob);
+      gitignore.addForcedExclude(glob);
     }
   }
   return gitignore;
