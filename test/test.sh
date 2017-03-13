@@ -25,7 +25,7 @@ cp data/in/hello.py data/in/ignore.py
 cp data/in/hello.sh data/in/exclude.sh
 cp data/in/hello.css data/in/ignore.css
 cp data/in/hello.dart data/in/exclude.dart
-cp data/in/hello.html data/in/ignore.html
+#cp data/in/hello.html data/in/ignore.html
 
 # Copy ignore.* and exclude.* files to out directory.
 cp data/in/ignore.* data/out

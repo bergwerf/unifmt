@@ -6,7 +6,7 @@ import 'dart:io';
 import 'dart:async';
 
 import 'formatter.dart';
-import 'config/tidy.dart';
+//import 'config/tidy.dart';
 import 'config/csscomb.dart';
 
 /// Return set with all used [CodeFormatter] instances.
@@ -81,6 +81,7 @@ Future<Set<CodeFormatter>> getFormatters(
       copyright: copyright,
       license: license));
 
+  /* Tidy is disabled because it's a pain in the ass.
   // Write tidy configuration to temporary file.
   var tidyConfigFile = await new File('${systemTmpDir.path}/unifmt/tidy.yaml')
       .create(recursive: true);
@@ -93,7 +94,7 @@ Future<Set<CodeFormatter>> getFormatters(
       (final String file) => ['-config', tidyConfigFile.path, file],
       (final List<String> files) => new List<String>.from(files)
         ..insertAll(0, ['-config', tidyConfigFile.path]),
-      website: 'http://www.html-tidy.org/'));
+      website: 'http://www.html-tidy.org/')); */
 
   // Write csscomb configuration to temporary file.
   var csscombConfigFile =
