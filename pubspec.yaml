@@ -1,5 +1,5 @@
 name:          unifmt
-version:       0.2.9+2
+version:       0.2.11
 author:        Herman Bergwerf <hermanbergwerf@gmail.com>
 description:   A universal code formatter.
 homepage:      https://github.com/hermanbergwerf/unifmt
