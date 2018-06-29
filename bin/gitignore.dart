@@ -10,29 +10,29 @@ import 'package:glob/glob.dart';
 
 class GitignoreMatcher {
   /// Exclude these globs.
-  List<Glob> _exclude = new List<Glob>();
+  final List<Glob> _exclude = new List<Glob>();
 
   /// Force include these globs.
-  List<Glob> _include = new List<Glob>();
+  final List<Glob> _include = new List<Glob>();
 
   /// Force exclude these globs, used so that --exclude is more important than
   /// [_include]. A cleaner solution would be using priorities but this is easy.
-  List<Glob> _forceExclude = new List<Glob>();
+  final List<Glob> _forceExclude = new List<Glob>();
 
   /// The constructor will parse the given `.gitignore` file.
   GitignoreMatcher(String path) {
     // Open file.
-    var file = new File(path);
+    final file = new File(path);
     if (file.existsSync()) {
       // Read file.
-      List<String> lines = file.readAsLinesSync();
+      final lines = file.readAsLinesSync();
 
       // Parse file.
-      lines.forEach((String line) {
+      for (final line in lines) {
         if (!(line.startsWith('#') || line.trimLeft().isEmpty)) {
           _parseGitignoreRule(line);
         }
-      });
+      }
     }
   }
 
@@ -76,9 +76,10 @@ class GitignoreMatcher {
   }
 
   /// Internal method used for parsing the `.gitignore` file.
-  void _parseGitignoreRule(String rule) {
+  void _parseGitignoreRule(String _rule) {
     // Check if this is an include rule.
-    bool forceInclude = rule.startsWith('!');
+    var rule = _rule;
+    final forceInclude = rule.startsWith('!');
     if (forceInclude) {
       rule = rule.substring(1);
     }
@@ -89,25 +90,25 @@ class GitignoreMatcher {
     // - If the rule ends with `/*`, add '*' to match all underlying files.
     // - Else add a rule that also checks if the file is in a directory with
     //   the specified name.
-    var rules = new List<Glob>();
+    final rules = new List<Glob>();
 
     // Add parent directory wildcard.
     if (rule.startsWith('/')) {
-      rule = '/**' + rule;
+      rule = '/**$rule';
     } else {
-      rule = '/**/' + rule;
+      rule = '/**/$rule';
     }
 
     // Add child directory wildcard.
     if (rule.endsWith('/')) {
       // Only include directory selector.
-      rules.add(new Glob(rule + '**'));
+      rules.add(new Glob('$rule**'));
     } else if (rule.endsWith('/*')) {
       // Only include directory selector.
-      rules.add(new Glob(rule + '*'));
+      rules.add(new Glob('$rule*'));
     } else {
       // Also include file selector.
-      rules..add(new Glob(rule))..add(new Glob(rule + '/**'));
+      rules..add(new Glob(rule))..add(new Glob('$rule/**'));
     }
 
     // Insert rules

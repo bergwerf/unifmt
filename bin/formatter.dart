@@ -8,7 +8,6 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:glob/glob.dart';
-import 'package:which/which.dart';
 
 import 'gitignore.dart';
 
@@ -117,7 +116,8 @@ Use of this source code is governed by an? .*-style license
 that can be found in the LICENSE file\\.''';
 
       // Decide indefinite article (i.e. 'a' or 'an').
-      var article = license.startsWith(new RegExp('[AaEeIiOoUu]')) ? 'an' : 'a';
+      final article =
+          license.startsWith(new RegExp('[AaEeIiOoUu]')) ? 'an' : 'a';
 
       // Generate license notice.
       _license.noticeRendered = '''
@@ -131,8 +131,8 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     }
 
     // Generate installMessage.
-    var installMessage =
-        new StringBuffer("The program '${this._bin}' is not installed.");
+    final installMessage =
+        new StringBuffer("The program '$_bin' is not installed.");
     if (pub != null) {
       installMessage.write(' You can install it by typing:\n');
       installMessage.writeln('pub global activate $pub');
@@ -158,7 +158,9 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
   }
 
   bool checkInstallation() {
-    return whichSync(_bin, orElse: () => null) != null;
+    // Check if binary exists (Unix systems).
+    final result = Process.runSync('which', [_bin]);
+    return result.stdout.toString().startsWith('/');
   }
 
   /// This method will check if the given file contains a license notice and
@@ -170,12 +172,12 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     }
 
     // Open and read file.
-    var file = new File(filepath);
-    var lines = file.readAsLinesSync();
+    final file = new File(filepath);
+    final lines = file.readAsLinesSync();
     var start = 0;
 
     // Test for shebang.
-    if (lines.length > 0 && lines.first.startsWith('#!')) {
+    if (lines.isNotEmpty && lines.first.startsWith('#!')) {
       // Make sure there is an empty line after the shebang.
       // Add empty line if the second line is empty or none exists.
       if ((lines.length > 1 && lines[1].isNotEmpty) || lines.length == 1) {
@@ -187,8 +189,8 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     }
 
     // Read license notice data into lists.
-    var rlines = LineSplitter.split(_license.noticeRendered).toList();
-    var plines = LineSplitter.split(_license.noticePattern).toList();
+    final rlines = LineSplitter.split(_license.noticeRendered).toList();
+    final plines = LineSplitter.split(_license.noticePattern).toList();
     assert(rlines.length == plines.length);
 
     // Determines if the lines should be written back into the file after the
@@ -210,8 +212,8 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
           // You can only check if this is a licence notice when you're inside
           // the range of [_license.noticePattern].
           if (i >= _license.patternOffset) {
-            var regex = new RegExp(plines[i - _license.patternOffset]);
-            var match = regex.firstMatch(lines[start + i]);
+            final regex = new RegExp(plines[i - _license.patternOffset]);
+            final match = regex.firstMatch(lines[start + i]);
             if (match != null) {
               var line = rlines[i];
 
@@ -237,7 +239,7 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
           // This was the last line, terminate the method.
           if (writeAfterLoop) {
             // Note that a terminating newline is added.
-            file.writeAsStringSync(lines.join('\n') + '\n');
+            file.writeAsStringSync('${lines.join('\n')}\n');
           }
           return;
         }
@@ -247,7 +249,7 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     // Insert new license notice.
 
     // Get rendered license notice with current year.
-    var noticeRendered = _license.noticeRendered
+    final noticeRendered = _license.noticeRendered
         .replaceFirst(r'$year', new DateTime.now().year.toString());
 
     // Note that a blank line is inserted after the license notice.
@@ -261,7 +263,7 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
     }
     // Write new content back into file.
     // Note that a terminating newline is added.
-    file.writeAsStringSync(lines.join('\n') + '\n');
+    file.writeAsStringSync('${lines.join('\n')}\n');
   }
 
   /// This method is called when a file in the underlying directory is updated.
@@ -270,7 +272,7 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
   FormatterResult formatOne(String filepath, GitignoreMatcher gitignore) {
     if (!gitignore.exclude(filepath)) {
       if (checkInstallation()) {
-        var output = Process.runSync(_bin, _getArgsOne(filepath));
+        final output = Process.runSync(_bin, _getArgsOne(filepath));
         addLicenseNotice(filepath);
         return new FormatterResult(
             output.exitCode == 0, output.stdout, output.stderr);
@@ -286,17 +288,17 @@ ${noticeLineStart}that can be found in the LICENSE file.$noticeEnd''';
   /// Globs all files and runs the formatter.
   FormatterResult formatAll(GitignoreMatcher gitignore) {
     // Retrieve all underlying files that match the given glob.
-    var fileEntities = _glob.listSync(followLinks: false);
-    if (fileEntities.length > 0) {
+    final fileEntities = _glob.listSync(followLinks: false);
+    if (fileEntities.isNotEmpty) {
       if (checkInstallation()) {
         // Generate and filter file list.
-        var files = gitignore.filter(new List<String>.generate(
+        final files = gitignore.filter(new List<String>.generate(
             fileEntities.length, (int i) => fileEntities[i].path));
 
         // Check if there are any files to be formatted.
         if (files.isNotEmpty) {
-          var output = Process.runSync(_bin, _getArgsAll(files));
-          files.forEach((String filepath) => addLicenseNotice(filepath));
+          final output = Process.runSync(_bin, _getArgsAll(files));
+          files.forEach(addLicenseNotice);
           return new FormatterResult(
               output.exitCode == 0, output.stdout, output.stderr);
         } else {

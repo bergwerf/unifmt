@@ -15,20 +15,20 @@ class CSSCombConfigGenerator {
   CSSCombConfigGenerator() : _config = new Map<String, dynamic>();
 
   /// Set option.
-  void set(String key, dynamic value) {
+  void set(String key, value) {
     _config[key] = value;
   }
 
   /// Generate config string.
   String generate() {
-    var encoder = new JsonEncoder();
+    const encoder = const JsonEncoder();
     return encoder.convert(_config);
   }
 }
 
 /// Generate default csscomb config.
 String getDefaultCSSCombConfig() {
-  var config = new CSSCombConfigGenerator();
+  final config = new CSSCombConfigGenerator();
   config
     ..set('remove-empty-rulesets', true)
     ..set('always-semicolon', true)

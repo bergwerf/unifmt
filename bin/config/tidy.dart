@@ -13,14 +13,14 @@ class TidyConfigGenerator {
   TidyConfigGenerator() : _config = new Map<String, dynamic>();
 
   /// Set option.
-  void set(String key, dynamic value) {
+  void set(String key, value) {
     _config[key] = value;
   }
 
   /// Generate config string.
   String generate() {
-    var data = new StringBuffer();
-    _config.forEach((String key, String value) {
+    final data = new StringBuffer();
+    _config.forEach((String key, value) {
       data.writeln('$key: $value');
     });
     return data.toString();
@@ -29,7 +29,7 @@ class TidyConfigGenerator {
 
 /// Generate default tidy config.
 String getDefaultTidyConfig() {
-  var config = new TidyConfigGenerator();
+  final config = new TidyConfigGenerator();
   config
     ..set('char-encoding', 'utf8')
     ..set('doctype', 'html5')

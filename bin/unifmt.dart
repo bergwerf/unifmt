@@ -11,13 +11,12 @@ import 'package:args/args.dart';
 import 'package:glob/glob.dart';
 import 'package:watcher/watcher.dart';
 
-import 'formatter.dart';
 import 'formatters.dart';
 import 'gitignore.dart';
 
 Future main(List<String> args) async {
   // Create CLI args parser.
-  var parser = new ArgParser();
+  final parser = new ArgParser();
   parser
     ..addFlag('help',
         abbr: 'h', defaultsTo: false, help: 'Displays usage information.')
@@ -70,13 +69,13 @@ license headers to the files in your repository.''');
   var gitignore = getIgnoreMatcher(exclude);
 
   // Create formatters.
-  var formatters =
+  final formatters =
       await getFormatters(options['copyright'] ?? '', options['license'] ?? '');
 
   // Bootstrap formatters.
   if (options['watch']) {
     // Setup watching.
-    var watcher = new DirectoryWatcher(Directory.current.path);
+    final watcher = new DirectoryWatcher(Directory.current.path);
 
     // Declare subscription.
     StreamSubscription subscription;
@@ -92,13 +91,13 @@ license headers to the files in your repository.''');
           gitignore = getIgnoreMatcher(exclude);
         } else {
           // Search for suitable formatter.
-          for (CodeFormatter formatter in formatters) {
+          for (final formatter in formatters) {
             if (formatter.canFormat(event.path)) {
               // Cancel subscription.
               await subscription.cancel();
 
               // Format file.
-              var result = formatter.formatOne(event.path, gitignore);
+              final result = formatter.formatOne(event.path, gitignore);
 
               // Reattatch subscription.
               subscription = watcher.events.listen(onWatchEvent);
@@ -125,11 +124,11 @@ license headers to the files in your repository.''');
     subscription = watcher.events.listen(onWatchEvent);
   } else {
     // Glob all files and reformat.
-    for (CodeFormatter formatter in formatters) {
+    for (final formatter in formatters) {
       if (options['verbose']) {
         print('Running ${formatter.language} formatter');
       }
-      var result = formatter.formatAll(gitignore);
+      final result = formatter.formatAll(gitignore);
 
       // Print results.
       if (result.success) {
@@ -159,8 +158,8 @@ license headers to the files in your repository.''');
 /// Helper function to create a new GitignoreMatcher that includes the globs
 /// that are ignored from the command line.
 GitignoreMatcher getIgnoreMatcher(List<String> extraExclude) {
-  var gitignore = new GitignoreMatcher('.gitignore');
-  for (String glob in extraExclude) {
+  final gitignore = new GitignoreMatcher('.gitignore');
+  for (final glob in extraExclude) {
     // By default extraExclude includes one empty string.
     if (glob.isNotEmpty) {
       gitignore.addForcedExclude(glob);

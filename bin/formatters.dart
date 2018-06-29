@@ -13,10 +13,10 @@ import 'config/csscomb.dart';
 Future<Set<CodeFormatter>> getFormatters(
     final String copyright, final String license) async {
   // Get system temporary files directory.
-  var systemTmpDir = Directory.systemTemp;
+  final systemTmpDir = Directory.systemTemp;
 
   // Create formatters.
-  var formatters = new Set<CodeFormatter>();
+  final formatters = new Set<CodeFormatter>();
 
   // C++ formatter
   formatters.add(new CodeFormatter(
@@ -97,32 +97,35 @@ Future<Set<CodeFormatter>> getFormatters(
       website: 'http://www.html-tidy.org/')); */
 
   // Write csscomb configuration to temporary file.
-  var csscombConfigFile =
+  final csscombConfigFile =
       await new File('${systemTmpDir.path}/unifmt/csscomb.json')
           .create(recursive: true);
   await csscombConfigFile.writeAsString(getDefaultCSSCombConfig());
+  print(csscombConfigFile.path);
+
   // CSS formatter
-  formatters.add(new CodeFormatter(
-      'CSS',
-      '**.css',
-      'csscomb',
+  formatters.add(new CodeFormatter('CSS', '**.css', 'csscomb',
       (final String file) => ['--config', csscombConfigFile.path, file],
-      (final List<String> files) => new List<String>.from(files)
-        ..insertAll(0, ['--config', csscombConfigFile.path]),
+      (final List<String> files) {
+    final args = ['-t', '--config', csscombConfigFile.path];
+    args.addAll(files);
+    return args;
+  },
       npm: 'csscomb',
       noticeStart: '/*\n',
       noticeLineStart: ' * ',
       noticeEnd: '\n */',
       copyright: copyright,
       license: license));
+
   // Sass formatter
-  formatters.add(new CodeFormatter(
-      'Sass',
-      '**.scss',
-      'csscomb',
+  formatters.add(new CodeFormatter('Sass', '**.scss', 'csscomb',
       (final String file) => ['--config', csscombConfigFile.path, file],
-      (final List<String> files) => new List<String>.from(files)
-        ..insertAll(0, ['--config', csscombConfigFile.path]),
+      (final List<String> files) {
+    final args = ['-t', '--config', csscombConfigFile.path];
+    args.addAll(files);
+    return args;
+  },
       npm: 'csscomb',
       noticeLineStart: '// ',
       copyright: copyright,
