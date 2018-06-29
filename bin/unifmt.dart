@@ -11,8 +11,8 @@ import 'package:args/args.dart';
 import 'package:glob/glob.dart';
 import 'package:watcher/watcher.dart';
 
-import 'formatters.dart';
-import 'gitignore.dart';
+import 'src/formatters.dart';
+import 'src/gitignore.dart';
 
 Future main(List<String> args) async {
   // Create CLI args parser.
