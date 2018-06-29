@@ -101,7 +101,6 @@ Future<Set<CodeFormatter>> getFormatters(
       await new File('${systemTmpDir.path}/unifmt/csscomb.json')
           .create(recursive: true);
   await csscombConfigFile.writeAsString(getDefaultCSSCombConfig());
-  print(csscombConfigFile.path);
 
   // CSS formatter
   formatters.add(new CodeFormatter('CSS', '**.css', 'csscomb',
