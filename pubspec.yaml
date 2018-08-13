@@ -6,8 +6,8 @@ homepage:      https://github.com/hermanbergwerf/unifmt
 executables:
   unifmt:      unifmt
 environment:
-  sdk:         '>=1.8.0 <2.0.0'
+  sdk:         '>=2.0.0-dev <3.0.0'
 dependencies:
-  args:        ^0.13.2
-  glob:        ^1.0.5
-  watcher:     ^0.9.7
+  args:        ^1.5.0
+  glob:        ^1.1.7
+  watcher:     ^0.9.7+10

@@ -7,32 +7,39 @@ packages:
       name: args
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.7"
+    version: "1.5.0"
   async:
     dependency: transitive
     description:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.0.8"
   charcode:
     dependency: transitive
     description:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   collection:
     dependency: transitive
     description:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.14.10"
+    version: "1.14.11"
   glob:
     dependency: "direct main"
     description:
       name: glob
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.7"
+  meta:
+    dependency: transitive
+    description:
+      name: meta
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
@@ -42,27 +49,27 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.1"
+    version: "1.6.2"
   source_span:
     dependency: transitive
     description:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.1"
   string_scanner:
     dependency: transitive
     description:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.4"
   watcher:
     dependency: "direct main"
     description:
       name: watcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.7+9"
+    version: "0.9.7+10"
 sdks:
-  dart: ">=2.0.0-dev.62.0 <=2.0.0-dev.65.0"
+  dart: ">=2.0.0-dev.62.0 <3.0.0"
