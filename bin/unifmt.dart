@@ -32,8 +32,8 @@ Future main(List<String> args) async {
         abbr: 'w',
         defaultsTo: false,
         help: 'Watch current directory for changes and reformat them.')
-    ..addOption('exclude',
-        abbr: 'e', allowMultiple: true, help: 'Exclude the given file globs.')
+    ..addMultiOption('exclude',
+        abbr: 'e', help: 'Exclude the given file globs.')
     ..addOption('copyright',
         abbr: 'c', help: 'Set copyright holder for license headers.')
     ..addOption('license',
